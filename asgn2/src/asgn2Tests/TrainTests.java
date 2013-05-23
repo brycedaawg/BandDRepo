@@ -40,10 +40,10 @@ public class TrainTests {
 	}
 	
 	/**
-	 * Tests to see if a simple locomotive can be added to an empty train
+	 * Tests to see if a simple locomotive can be added to an empty train without throwing an exception
 	 */
 	@Test
-	public void testAddCarriage_first_locomotive() {
+	public void testAddCarriage_first_locomotive() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
 	}
 	
@@ -51,7 +51,7 @@ public class TrainTests {
 	 * Tests to see if adding a freight car first will produce an exception
 	 */
 	@Test(expected = TrainException.class)
-	public void testAddCarriage_first_freightCar() {
+	public void testAddCarriage_first_freightCar() throws TrainException {
 		train.addCarriage(new FreightCar(1000, "G"));
 	}
 	
@@ -59,7 +59,7 @@ public class TrainTests {
 	 * Tests to see if adding a passenger car first will produce an exception
 	 */
 	@Test(expected = TrainException.class)
-	public void testAddCarriage_first_PassengerCar() {
+	public void testAddCarriage_first_PassengerCar() throws TrainException {
 		train.addCarriage(new PassengerCar(1000, 30));
 	}
 	
@@ -67,7 +67,7 @@ public class TrainTests {
 	 * Tests to see if adding a locomotive, passenger car and freight car to an empty train will succeed
 	 */
 	@Test
-	public void testAddCarriage_locomotive_passengerCar_freightCar() {
+	public void testAddCarriage_locomotive_passengerCar_freightCar() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.addCarriage(new PassengerCar(1000, 30));
 		train.addCarriage(new FreightCar(1000, "G"));
@@ -77,7 +77,7 @@ public class TrainTests {
 	 * Tests to see if adding a locomotive, freight car and passenger car to an empty train will throw a train exception
 	 */
 	@Test(expected = TrainException.class)
-	public void testAddCarriage_locomotive_freightCar_passengerCar() {
+	public void testAddCarriage_locomotive_freightCar_passengerCar() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.addCarriage(new FreightCar(1000, "G"));
 		train.addCarriage(new PassengerCar(1000, 30));
@@ -87,7 +87,7 @@ public class TrainTests {
 	 * Tests to see if adding a car to a valid train with passengers boarded will throw a train exception
 	 */
 	@Test(expected = TrainException.class)
-	public void testAddCarriage_passengersBoarded() {
+	public void testAddCarriage_passengersBoarded() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.addCarriage(new PassengerCar(1000, 30));
 		train.board(1);
@@ -98,7 +98,7 @@ public class TrainTests {
 	 * Tests to see if boarding a negative number of passengers throws a train exception
 	 */
 	@Test(expected = TrainException.class)
-	public void testBoard_negative() {
+	public void testBoard_negative() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.addCarriage(new PassengerCar(1000, 30));
 		train.board(-1);
@@ -108,7 +108,7 @@ public class TrainTests {
 	 * Tests to see if the first carriage method returns the first carriage of the train
 	 */
 	@Test
-	public void testFirstCarriage() {
+	public void testFirstCarriage() throws TrainException {
 		Locomotive l = new Locomotive(1500, "4D");
 		train.addCarriage(l);
 		train.addCarriage(new PassengerCar(1000, 30));
@@ -121,7 +121,7 @@ public class TrainTests {
 	 * Tests to see if the first carriage method returns null when there are no carriages added to a train
 	 */
 	@Test
-	public void testFirstCarriage_null() {
+	public void testFirstCarriage_null() throws TrainException {
 		assertEquals(train.firstCarriage(), null);
 	}
 	
@@ -129,7 +129,7 @@ public class TrainTests {
 	 * Tests to see if the next carriage method returns the next carriage of the train
 	 */
 	@Test
-	public void testNextCarriage() {
+	public void testNextCarriage() throws TrainException {
 		Locomotive l = new Locomotive(1500, "4D");
 		PassengerCar p = new PassengerCar(1000, 30);
 		train.addCarriage(l);
@@ -143,7 +143,7 @@ public class TrainTests {
 	 * Tests to see if the next carriage method returns null when it's called more times than there are carriages
 	 */
 	@Test
-	public void testNextCarriage_null() {
+	public void testNextCarriage_null() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.addCarriage(new PassengerCar(1000, 30));
 		train.addCarriage(new FreightCar(1000, "G"));
@@ -157,7 +157,7 @@ public class TrainTests {
 	 * Tests to see if the numberOfSeats method returns the number of seats
 	 */
 	@Test
-	public void testNumberOfSeats() {
+	public void testNumberOfSeats() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.addCarriage(new PassengerCar(1000, 30));
 		train.addCarriage(new PassengerCar(1000, 30));
@@ -168,7 +168,7 @@ public class TrainTests {
 	 * Tests to see if the numberOnBoard method returns the number of passengers boarded
 	 */
 	@Test
-	public void testNumberOnBoard() {
+	public void testNumberOnBoard() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.addCarriage(new PassengerCar(1000, 30));
 		train.board(2);
@@ -180,7 +180,7 @@ public class TrainTests {
 	 * Tests to see if the removeCarriage method removes the last carriage of the train
 	 */
 	@Test
-	public void testRemoveCarriage() {
+	public void testRemoveCarriage() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.RemoveCarriage();
 		assertEquals(train.firstCarriage(), null)
@@ -190,7 +190,7 @@ public class TrainTests {
 	 * Tests to see if the removeCarriage method throws a train exception when there aren't any carriages to remove
 	 */
 	@Test(expected = TrainException.class)
-	public void testRemoveCarriage_noneToRemove() {
+	public void testRemoveCarriage_noneToRemove() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.RemoveCarriage();
 		train.RemoveCarriage();
@@ -200,7 +200,7 @@ public class TrainTests {
 	 * Tests to see if the removeCarriage method throws a train exception when there aren't are passengers boarded
 	 */
 	@Test(expected = TrainException.class)
-	public void testRemoveCarriage_boarded() {
+	public void testRemoveCarriage_boarded() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.addCarriage(new PassengerCar(1000, 30));
 		train.board(2);
@@ -211,7 +211,7 @@ public class TrainTests {
 	 * Tests to see if the to string method works
 	 */
 	@Test(expected = TrainException.class)
-	public void testToString() {
+	public void testToString() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.addCarriage(new PassengerCar(1000, 30));
 		train.addCarriage(new FreightCar(1000, "G"));
@@ -224,7 +224,7 @@ public class TrainTests {
 	 * Tests to see if a train's can move method returns true as expected
 	 */
 	@Test(expected = TrainException.class)
-	public void testTrainCanMove_true() {
+	public void testTrainCanMove_true() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.addCarriage(new PassengerCar(1000, 30));
 		train.addCarriage(new FreightCar(1000, "G"));
@@ -235,7 +235,7 @@ public class TrainTests {
 	 * Tests to see if a train's can move method returns false as expected
 	 */
 	@Test(expected = TrainException.class)
-	public void testTrainCanMove_false() {
+	public void testTrainCanMove_false() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.addCarriage(new PassengerCar(1000, 30));
 		train.addCarriage(new PassengerCar(2000, 30));
@@ -247,7 +247,7 @@ public class TrainTests {
 	 * Tests to see if a train's can move method returns true when no carriages are added to the train
 	 */
 	@Test(expected = TrainException.class)
-	public void testTrainCanMove_noCarriages() {
+	public void testTrainCanMove_noCarriages() throws TrainException {
 		assertEquals(train.canMove(), true);
 	}
 }
