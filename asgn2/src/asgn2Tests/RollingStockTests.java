@@ -74,4 +74,38 @@ public class RollingStockTests
 		//test Locomotive.power()
 		assertTrue(power.intValue() == test.power().intValue());
 	}
+	
+	/**
+	 * Tests the method: FreightCar.goodsType()
+	 * Instantiate a FreightCar with goodsType 'R'
+	 * The string returned should be equal to the set type.
+	 * @author Daniel Rablin - n8038848
+	 */
+	@Test
+	public void Test_FreightCarGoodsType() throws TrainException
+	{
+		Integer weight = 50;
+		String goodsType = "R";
+
+		//instantiate object
+		FreightCar test = new FreightCar(weight, goodsType);
+		
+		//test
+		assertTrue(test.goodsType().equals(goodsType));
+	}
+	
+	/**
+	 * Tests the exception in constructor: FreightCar
+	 * Purposely instantiate a FreightCar object with a bad goodsType code.
+	 * A TrainException is expected for this test to pass.
+	 * @author Daniel Rablin - n8038848
+	 */
+	@Test(expected=TrainException.class)
+	public void ExceptionTest_FreightCarConstructor() throws TrainException
+	{
+		Integer weight = 50;
+		String badGoods = "A";
+		//bad instantiation should throw exception
+		new FreightCar(weight, badGoods);
+	}
 }
