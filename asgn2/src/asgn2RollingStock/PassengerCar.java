@@ -2,6 +2,9 @@ package asgn2RollingStock;
 
 import asgn2Exceptions.TrainException;
 
+/**
+ * @author Daniel Rablin - n8038848
+ **/
 public class PassengerCar extends RollingStock
 {
 	private Integer seatNum;
@@ -27,7 +30,7 @@ public class PassengerCar extends RollingStock
 	{
 		if(newPassengers < 0)
 		{
-			throw new TrainException("Amount of passengers can not be negative");
+			throw new TrainException("Amount of passengers can not be negative.");
 		}
 		
 		if(newPassengers > (seatNum-seatsTaken))
@@ -39,6 +42,20 @@ public class PassengerCar extends RollingStock
 			seatsTaken += newPassengers;
 			return 0;
 		}
+	}
+	
+	public void alight(Integer departingPassengers) throws TrainException
+	{
+		if(departingPassengers < 0)
+		{
+			throw new TrainException("Amount of departing passengers can not be negative.");
+		}
+		else if (departingPassengers > numberOnBoard())
+		{
+			throw new TrainException("Amount of departing passengers can not be greater than the amount of passengers on board.");
+		}
+
+		seatsTaken -= departingPassengers;
 	}
 	
 	public Integer numberOfSeats()
