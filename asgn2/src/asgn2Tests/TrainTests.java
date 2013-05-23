@@ -92,7 +92,6 @@ public class TrainTests {
 		train.addCarriage(new PassengerCar(1000, 30));
 		train.board(1);
 		train.addCarriage(new PassengerCar(1000, 30));
-		System.out.println("whut");
 	}
 	
 	/**
@@ -211,7 +210,7 @@ public class TrainTests {
 	/**
 	 * Tests to see if the to string method works
 	 */
-	@Test(expected = TrainException.class)
+	@Test
 	public void testToString() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.addCarriage(new PassengerCar(1000, 30));
@@ -224,30 +223,30 @@ public class TrainTests {
 	/**
 	 * Tests to see if a train's can move method returns true as expected
 	 */
-	@Test(expected = TrainException.class)
+	@Test
 	public void testTrainCanMove_true() throws TrainException {
-		train.addCarriage(new Locomotive(1500, "4D"));
-		train.addCarriage(new PassengerCar(1000, 30));
-		train.addCarriage(new FreightCar(1000, "G"));
-		assertEquals(train.canMove(), true);
+		train.addCarriage(new Locomotive(120, "4D"));
+		train.addCarriage(new PassengerCar(50, 30));
+		train.addCarriage(new FreightCar(80, "G"));
+		assertTrue(train.canMove());
 	}
 	
 	/**
 	 * Tests to see if a train's can move method returns false as expected
 	 */
-	@Test(expected = TrainException.class)
+	@Test
 	public void testTrainCanMove_false() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.addCarriage(new PassengerCar(1000, 30));
 		train.addCarriage(new PassengerCar(2000, 30));
 		train.addCarriage(new FreightCar(1000, "G"));
-		assertEquals(train.canMove(), false);
+		assertFalse(train.canMove());
 	}
 	
 	/**
 	 * Tests to see if a train's can move method returns true when no carriages are added to the train
 	 */
-	@Test(expected = TrainException.class)
+	@Test
 	public void testTrainCanMove_noCarriages() throws TrainException {
 		assertEquals(train.canMove(), true);
 	}
