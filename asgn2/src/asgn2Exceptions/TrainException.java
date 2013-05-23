@@ -1,6 +1,6 @@
 package asgn2Exceptions;
 
-public final class TrainException extends Throwable
+public final class TrainException extends Exception
 {
 	public TrainException(String message)
 	{
