@@ -2,6 +2,9 @@ package asgn2RollingStock;
 
 import asgn2Exceptions.TrainException;
 
+/**
+ * @author Daniel Rablin - n8038848
+ **/
 public class Locomotive extends RollingStock {
 
 	private Integer powerClass;

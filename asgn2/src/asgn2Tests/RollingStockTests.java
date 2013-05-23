@@ -1,7 +1,3 @@
-/**
- * @author Daniel Rablin - n8038848
- **/
-
 package asgn2Tests; 
 
 import static org.junit.Assert.*;
@@ -13,6 +9,9 @@ import asgn2RollingStock.FreightCar;
 import asgn2RollingStock.Locomotive;
 import asgn2RollingStock.PassengerCar;
 
+/**
+ * @author Daniel Rablin - n8038848
+ **/
 public class RollingStockTests
 {
 	/**
@@ -178,7 +177,7 @@ public class RollingStockTests
 	 * A TrainException is expected for this test to pass.
 	 */
 	@Test(expected=TrainException.class)
-	public void Test_PassengerCarBoard() throws TrainException
+	public void ExceptionTest_PassengerCarBoard() throws TrainException
 	{
 		Integer weight = 50;
 		Integer seatsNum = 20;
@@ -228,6 +227,68 @@ public class RollingStockTests
 		
 		//test
 		assertTrue(passengerNum.equals(passengerCar.numberOnBoard()));
+	}
+	
+	/**
+	 * Tests the exception in PassengerCar.alight(Integer).
+	 * Instantiate a PassengerCar object, and then attempt to alight a negative amount of passengers.
+	 * A TrainException is expected for this test to pass.
+	 */
+	@Test(expected=TrainException.class)
+	public void ExceptionTest_PassengerCarAlightNegative() throws TrainException
+	{
+		Integer weight = 50;
+		Integer seatsNum = 20;
+		Integer negativePassengerNum = -1;
+
+		//instantiate object
+		PassengerCar passengerCar = new PassengerCar(weight, seatsNum);
+		
+		//test - should throw exception
+		passengerCar.alight(negativePassengerNum);
+	}
+	
+	/**
+	 * Tests the exception in PassengerCar.alight(Integer).
+	 * Instantiate a PassengerCar object, and then attempt to alight a more than the amount of boarded passengers.
+	 * A TrainException is expected for this test to pass.
+	 */
+	@Test(expected=TrainException.class)
+	public void ExceptionTest_PassengerCarAlightTooMany() throws TrainException
+	{
+		Integer weight = 50;
+		Integer seatsNum = 20;
+		Integer boardingPassengers = 15;
+		Integer alightingPassengers = 16;
+
+		//instantiate object
+		PassengerCar passengerCar = new PassengerCar(weight, seatsNum);
+		passengerCar.board(boardingPassengers);
+		
+		//test - should throw exception
+		passengerCar.alight(alightingPassengers);
+	}
+	
+	/**
+	 * Tests PassengerCar.alight(Integer) to see if the amount of alighted passengers leaves the correct amount of passengers on board.
+	 * Instantiate a PassengerCar object, and board passengers, then alight some of them, then test if the amount of passengers left is correct.
+	 */
+	@Test
+	public void Test_PassengerCarAlight() throws TrainException
+	{
+		Integer weight = 50;
+		Integer seatsNum = 20;
+		Integer boardingPassengers = 15;
+		Integer alightingPassengers = 10;
+		Integer leftPassengers = boardingPassengers - alightingPassengers;
+
+		//instantiate object
+		PassengerCar passengerCar = new PassengerCar(weight, seatsNum);
+		passengerCar.board(boardingPassengers);
+		passengerCar.alight(alightingPassengers);
+		
+		//test - should throw exception
+		assertTrue(leftPassengers.equals(passengerCar.numberOnBoard()));
 	}
 	
 	/**

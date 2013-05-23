@@ -2,6 +2,9 @@ package asgn2RollingStock;
 
 import asgn2Exceptions.TrainException;
 
+/**
+ * @author Daniel Rablin - n8038848
+ **/
 public abstract class RollingStock extends Object
 {
 	private Integer grossweight;
