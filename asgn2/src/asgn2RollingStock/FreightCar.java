@@ -14,9 +14,9 @@ public class FreightCar extends RollingStock
 	 * 
 	 * @author Daniel Rablin - n8038848
 	 */
-	public FreightCar(Integer newGrossWeight, String goodsType) throws TrainException
+	public FreightCar(Integer grossWeight, String goodsType) throws TrainException
 	{
-		super(newGrossWeight);
+		super(grossWeight);
 		
 		if(goodsType.length() != 1)
 		{
