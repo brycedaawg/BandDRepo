@@ -92,6 +92,7 @@ public class TrainTests {
 		train.addCarriage(new PassengerCar(1000, 30));
 		train.board(1);
 		train.addCarriage(new PassengerCar(1000, 30));
+		System.out.println("whut");
 	}
 	
 	/**
@@ -161,7 +162,7 @@ public class TrainTests {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.addCarriage(new PassengerCar(1000, 30));
 		train.addCarriage(new PassengerCar(1000, 30));
-		assertEquals(train.numberOfSeats(), 60);
+		assertEquals(train.numberOfSeats().intValue(), 60);
 	}
 	
 	/**
@@ -173,7 +174,7 @@ public class TrainTests {
 		train.addCarriage(new PassengerCar(1000, 30));
 		train.board(2);
 		train.board(1);
-		assertEquals(train.numberOnBoard(), 3);
+		assertEquals(train.numberOnBoard().intValue(), 3);
 	}
 	
 	/**
@@ -183,7 +184,7 @@ public class TrainTests {
 	public void testRemoveCarriage() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.RemoveCarriage();
-		assertEquals(train.firstCarriage(), null)
+		assertEquals(train.firstCarriage(), null);
 	}
 	
 	/**
