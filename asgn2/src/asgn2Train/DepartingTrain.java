@@ -10,7 +10,7 @@ import asgn2RollingStock.Locomotive;
 import asgn2RollingStock.PassengerCar;
 import asgn2RollingStock.RollingStock;
 
-public class DepartingTrain
+public class DepartingTrain extends Object
 {
 	private LinkedList<RollingStock> carriages;
 	private LinkedList<RollingStock> locomotives;
