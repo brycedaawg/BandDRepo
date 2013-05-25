@@ -1,3 +1,5 @@
+//@author Bryce Kiefer N8040486
+
 package asgn2Train;
 
 import java.util.Iterator;
@@ -35,7 +37,11 @@ public class DepartingTrain extends Object
 		{
 			RollingStock carriage = iterator.next();
 			if (carriage instanceof Locomotive)			locomotiveCount++;
-			if (carriage instanceof PassengerCar)		passengerCarCount++;
+			if (carriage instanceof PassengerCar)
+			{
+				if (((PassengerCar)carriage).numberOnBoard() > 0) throw new TrainException("Unable to add locomotive; there are passengers on board this train");
+				passengerCarCount++;
+			}
 			if (carriage instanceof FreightCar)			freightCarCount++;
 		}
 		
