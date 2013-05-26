@@ -263,8 +263,6 @@ public class MainFrame extends JFrame {
 	
 	private Boolean CheckTextValues(String selected)
 	{
-		System.out.println(tf_createCarriage_weight.getText());
-		System.out.println(tf_createCarriage_passengers.getText());
 		try
 		{
 			if(Integer.parseInt(tf_createCarriage_weight.getText().toString()) >= 0)
@@ -316,6 +314,7 @@ public class MainFrame extends JFrame {
 			newModel.addElement(s);
 		}
 		lst_createCarriage_rollingStocks.setModel(newModel);
+		lst_createCarriage_rollingStocks.setSelectedIndex(0);
 		validate();
 		repaint();
 	}
