@@ -12,7 +12,6 @@ import asgn2RollingStock.PassengerCar;
 import asgn2RollingStock.RollingStock;
 import asgn2Train.DepartingTrain;
 
-import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -185,8 +184,14 @@ public class MainFrame extends JFrame {
 		switch(selected.toString())
 		{
 		case "Locomotive":
-			lst_createCarriage_rollingStocks = new JList<String>(new String[]{"Passenger Car", "Freight Car"});
-			add(lst_createCarriage_rollingStocks);
+//			lst_createCarriage_rollingStocks.
+//			lst_createCarriage_rollingStocks = new JList<String>(new String[]{"Passenger Car", "Freight Car"});
+			DefaultListModel<String> newModel = new DefaultListModel<String>();
+			newModel.addElement("Passenger Car");
+			newModel.addElement("Freight Car");
+			lst_createCarriage_rollingStocks.setModel(newModel);
+			validate();
+			repaint();
 			try 
 			{
 				dt_carriages.addCarriage(new Locomotive(
