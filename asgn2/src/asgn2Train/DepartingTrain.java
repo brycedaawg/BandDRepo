@@ -134,14 +134,14 @@ public class DepartingTrain extends Object
 	}
 	public void RemoveCarriage() throws TrainException
 	{
-		if (numberOnBoard() > 0) throw new TrainException("Unable tp remove carriage; there are passengers on board this train");
+		if (numberOnBoard() > 0) throw new TrainException("Unable to remove carriage; there are passengers on board this train");
 		try
 		{
 			carriages.removeLast();
 		}
 		catch (NoSuchElementException e)
 		{
-			throw new TrainException("Unable tp remove carriage; there are no carriages to remove");
+			throw new TrainException("Unable to remove carriage; there are no carriages to remove");
 		}
 	}
 	public String toString()
