@@ -2,10 +2,6 @@ package asgn2GUI;
 
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import asgn2Exceptions.TrainException;
@@ -15,12 +11,12 @@ import asgn2RollingStock.PassengerCar;
 import asgn2RollingStock.RollingStock;
 import asgn2Train.DepartingTrain;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
@@ -32,6 +28,9 @@ public class MainFrame extends JFrame {
 	private JFormattedTextField tf_createCarriage_passengers;
 	private JLabel l_createCarriage_passengers;
 	private JButton btn_createCarriage_add;
+	private JScrollPane trainScrollPane;
+	private JPanel trainPanel;
+	private int carriageCount = 0;
 	
 	public MainFrame(String title, int width, int height)
 	{
@@ -108,10 +107,75 @@ public class MainFrame extends JFrame {
 		l_createCarriage_passengers.setVerticalAlignment(JLabel.CENTER);
 		l_createCarriage_passengers.setBounds((int)((1.0f/9.0f) * width), (int)((15.0f/18.0f) * height), (int)((1.0f/5.0f) * width), (int)((1.0f/18.0f) * height));
 		
+		JLabel l_train_weight = new JLabel("Weight:", JLabel.LEFT);
+		l_train_weight.setVerticalAlignment(JLabel.CENTER);
+		l_train_weight.setBounds((int)((17.0f/24.0f) * width), (int)((17.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		
+		JLabel l_train_power = new JLabel("Power:", JLabel.LEFT);
+		l_train_power.setVerticalAlignment(JLabel.CENTER);
+		l_train_power.setBounds((int)((17.0f/24.0f) * width), (int)((19.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		
+		JLabel l_train_powerFree = new JLabel("Power Free:", JLabel.LEFT);
+		l_train_powerFree.setVerticalAlignment(JLabel.CENTER);
+		l_train_powerFree.setBounds((int)((17.0f/24.0f) * width), (int)((21.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		
+		JLabel l_train_passengers = new JLabel("Passengers:", JLabel.LEFT);
+		l_train_passengers.setVerticalAlignment(JLabel.CENTER);
+		l_train_passengers.setBounds((int)((17.0f/24.0f) * width), (int)((23.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		
+		JLabel l_train_seats = new JLabel("Seats:", JLabel.LEFT);
+		l_train_seats.setVerticalAlignment(JLabel.CENTER);
+		l_train_seats.setBounds((int)((17.0f/24.0f) * width), (int)((25.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		
+		JLabel l_train_availableSeats = new JLabel("Available Seats:", JLabel.LEFT);
+		l_train_availableSeats.setVerticalAlignment(JLabel.CENTER);
+		l_train_availableSeats.setBounds((int)((17.0f/24.0f) * width), (int)((27.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		
+		JLabel l_train_canMove = new JLabel("Can Move:", JLabel.LEFT);
+		l_train_canMove.setVerticalAlignment(JLabel.CENTER);
+		l_train_canMove.setBounds((int)((17.0f/24.0f) * width), (int)((29.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		
+		JLabel l_train_input_weight = new JLabel("0", JLabel.RIGHT);
+		l_train_input_weight.setVerticalAlignment(JLabel.CENTER);
+		l_train_input_weight.setBounds((int)((17.0f/24.0f) * width), (int)((17.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		
+		JLabel l_train_input_power = new JLabel("0", JLabel.RIGHT);
+		l_train_input_power.setVerticalAlignment(JLabel.CENTER);
+		l_train_input_power.setBounds((int)((17.0f/24.0f) * width), (int)((19.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		
+		JLabel l_train_input_powerFree = new JLabel("0", JLabel.RIGHT);
+		l_train_input_powerFree.setVerticalAlignment(JLabel.CENTER);
+		l_train_input_powerFree.setBounds((int)((17.0f/24.0f) * width), (int)((21.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		
+		JLabel l_train_input_passengers = new JLabel("0", JLabel.RIGHT);
+		l_train_input_passengers.setVerticalAlignment(JLabel.CENTER);
+		l_train_input_passengers.setBounds((int)((17.0f/24.0f) * width), (int)((23.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		
+		JLabel l_train_input_seats = new JLabel("0", JLabel.RIGHT);
+		l_train_input_seats.setVerticalAlignment(JLabel.CENTER);
+		l_train_input_seats.setBounds((int)((17.0f/24.0f) * width), (int)((25.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		
+		JLabel l_train_input_availableSeats = new JLabel("0", JLabel.RIGHT);
+		l_train_input_availableSeats.setVerticalAlignment(JLabel.CENTER);
+		l_train_input_availableSeats.setBounds((int)((17.0f/24.0f) * width), (int)((27.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		
+		JLabel l_train_input_canMove = new JLabel("YES", JLabel.RIGHT);
+		l_train_input_canMove.setVerticalAlignment(JLabel.CENTER);
+		l_train_input_canMove.setBounds((int)((17.0f/24.0f) * width), (int)((29.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		
 		//Buttons
 		btn_createCarriage_add = new JButton("Add");
 		btn_createCarriage_add.setBounds((int)((2.05f/9.0f) * width), (int)((8.0f/9.0f) * height), (int)((1.0f/10.0f) * width), (int)((1.0f/18.0f) * height));
 		btn_createCarriage_add.setEnabled(false);
+		
+		JButton btn_removeCarriage_remove = new JButton("Remove");
+		btn_removeCarriage_remove.setBounds((int)((7.0f/18.0f) * width), (int)((29.0f/36.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		
+		JButton btn_boardPassengers_board = new JButton("Board");
+		btn_boardPassengers_board.setBounds((int)((21.0f/24.0f) * width), (int)((26.0f/36.0f) * height), (int)((3.0f/36.0f) * width), (int)((1.0f/18.0f) * height));
+		
+		JButton btn_reset_reset = new JButton("Reset");
+		btn_reset_reset.setBounds((int)((17.0f/24.0f) * width), (int)((32.0f/36.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
 		//Formatted text fields
 			//Weight
@@ -124,6 +188,20 @@ public class MainFrame extends JFrame {
 		tf_createCarriage_passengers.setValue(new String("0"));
 		tf_createCarriage_passengers.setBounds((int)((1.0f/9.0f) * width), (int)((8.0f/9.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
+		//Board passengers
+		final JFormattedTextField tf_boardPassengers_passengers = new JFormattedTextField();
+		tf_boardPassengers_passengers.setValue(new Integer(0));
+		tf_boardPassengers_passengers.setHorizontalAlignment(JTextField.RIGHT);
+		tf_boardPassengers_passengers.setBounds((int)((17.0f/24.0f) * width), (int)((26.0f/36.0f) * height), (int)((3.0f/18.0f) * width), (int)((1.0f/18.0f) * height));
+		
+		//Scroll panes
+		trainPanel = new JPanel();
+		trainPanel.setLayout(null);
+		trainPanel.setPreferredSize(new Dimension(220, (int)(2.0f/3.0f * height) - 20));
+		
+		trainScrollPane = new JScrollPane(trainPanel);
+		trainScrollPane.setBounds(0, 0, (int)(2.0f/3.0f * width), (int)(2.0f/3.0f * height));
+		
 		//Add swing components to content pane
 		add(l_createCarriage);
 		add(l_removeCarriage);
@@ -131,16 +209,36 @@ public class MainFrame extends JFrame {
 		add(l_reset);
 		add(l_currentCarriage);
 		add(l_train);
-		
 		add(l_createCarriage_weight);
 		add(l_createCarriage_passengers);
+		add(l_train_weight);
+		add(l_train_power);
+		add(l_train_powerFree);
+		add(l_train_passengers);
+		add(l_train_seats);
+		add(l_train_availableSeats);
+		add(l_train_canMove);
+		
+		add(l_train_input_weight);
+		add(l_train_input_power);
+		add(l_train_input_powerFree);
+		add(l_train_input_passengers);
+		add(l_train_input_seats);
+		add(l_train_input_availableSeats);
+		add(l_train_input_canMove);
 		
 		add(btn_createCarriage_add);
+		add(btn_removeCarriage_remove);
+		add(btn_boardPassengers_board);
+		add(btn_reset_reset);
 		
 		add(lst_createCarriage_rollingStocks);
 		
 		add(tf_createCarriage_weight);
 		add(tf_createCarriage_passengers);
+		add(tf_boardPassengers_passengers);
+		
+		add(trainScrollPane);
 		
 		//Add behaviors
 		lst_createCarriage_rollingStocks.addListSelectionListener(new ListSelectionListener()
@@ -216,6 +314,15 @@ public class MainFrame extends JFrame {
 	
 	private void AddCarriage(String selected)
 	{
+		//Create a new train label to add to the GUI
+		JLabel trainLabel = new JLabel("");
+		trainLabel.setHorizontalAlignment(JLabel.CENTER);
+		trainLabel.setOpaque(true);
+		trainLabel.setBounds(carriageCount * 210 + 10, 50, 200, 100);
+		trainPanel.add(trainLabel);
+		carriageCount++;
+		trainPanel.setPreferredSize(new Dimension(carriageCount * 210 + 10, trainPanel.getPreferredSize().height));
+		
 		switch(selected)
 		{
 		case "Locomotive":
@@ -226,6 +333,10 @@ public class MainFrame extends JFrame {
 						Integer.parseInt(tf_createCarriage_weight.getText().toString()),
 						tf_createCarriage_passengers.getText().toString()
 						));
+				
+				trainLabel.setText("Locomotive");
+				trainLabel.setBackground(new Color(255,255,0));
+				
 			} catch (NumberFormatException | TrainException e1) {
 //				e1.printStackTrace();
 			}
@@ -236,6 +347,11 @@ public class MainFrame extends JFrame {
 						Integer.parseInt(tf_createCarriage_weight.getText().toString()),
 						Integer.parseInt(tf_createCarriage_passengers.getText().toString())
 						));
+				
+				//Set up train label as passenger car
+				trainLabel.setText("Passenger Car");
+				trainLabel.setBackground(new Color(255,0,0));
+				
 			} catch (NumberFormatException | TrainException e1) {
 //				e1.printStackTrace();
 			}
@@ -247,6 +363,11 @@ public class MainFrame extends JFrame {
 						Integer.parseInt(tf_createCarriage_weight.getText().toString()),
 						tf_createCarriage_passengers.getText().toString()
 						));
+				
+				//Set up train label as freight car
+				trainLabel.setText("Freight Car");
+				trainLabel.setBackground(new Color(0,0,255));
+				
 			} catch (TrainException e1) {
 //				e1.printStackTrace();
 			}
@@ -271,7 +392,7 @@ public class MainFrame extends JFrame {
 				switch(selected.toString())
 				{
 				case "Locomotive":
-					str = tf_createCarriage_passengers.getText();
+					str = tf_createCarriage_passengers.getText().toUpperCase();
 					if(str.length() == 2)
 					{
 						if(Integer.valueOf(str.substring(0, 1)) >= 1 || Integer.valueOf(str.substring(0, 1)) <= 9)
@@ -290,7 +411,7 @@ public class MainFrame extends JFrame {
 					}
 					break;
 				case "Freight Car":
-					str = tf_createCarriage_passengers.getText();
+					str = tf_createCarriage_passengers.getText().toUpperCase();
 					if(str.length() == 1)
 					{
 						if(str.equals("G") || str.equals("R") || str.equals("D"))
