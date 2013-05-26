@@ -34,6 +34,16 @@ public class MainFrame extends JFrame {
 	private JPanel trainPanel;
 	private LinkedList<JLabel> trainCarriages;
 	
+	//train info labels
+	private JLabel l_train_input_weight;
+	private JLabel l_train_input_power;
+	private JLabel l_train_input_powerFree;
+	private JLabel l_train_input_passengers;
+	private JLabel l_train_input_seats;
+	private JLabel l_train_input_availableSeats;
+	private JLabel l_train_input_canMove;
+	
+	
 	//buttons
 	private JButton btn_createCarriage_add;
 	private JButton btn_removeCarriage_remove;
@@ -147,31 +157,31 @@ public class MainFrame extends JFrame {
 		l_train_canMove.setVerticalAlignment(JLabel.CENTER);
 		l_train_canMove.setBounds((int)((17.0f/24.0f) * width), (int)((29.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
-		JLabel l_train_input_weight = new JLabel("0", JLabel.RIGHT);
+		l_train_input_weight = new JLabel("0", JLabel.RIGHT);
 		l_train_input_weight.setVerticalAlignment(JLabel.CENTER);
 		l_train_input_weight.setBounds((int)((17.0f/24.0f) * width), (int)((17.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
-		JLabel l_train_input_power = new JLabel("0", JLabel.RIGHT);
+		l_train_input_power = new JLabel("0", JLabel.RIGHT);
 		l_train_input_power.setVerticalAlignment(JLabel.CENTER);
 		l_train_input_power.setBounds((int)((17.0f/24.0f) * width), (int)((19.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
-		JLabel l_train_input_powerFree = new JLabel("0", JLabel.RIGHT);
+		l_train_input_powerFree = new JLabel("0", JLabel.RIGHT);
 		l_train_input_powerFree.setVerticalAlignment(JLabel.CENTER);
 		l_train_input_powerFree.setBounds((int)((17.0f/24.0f) * width), (int)((21.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
-		JLabel l_train_input_passengers = new JLabel("0", JLabel.RIGHT);
+		l_train_input_passengers = new JLabel("0", JLabel.RIGHT);
 		l_train_input_passengers.setVerticalAlignment(JLabel.CENTER);
 		l_train_input_passengers.setBounds((int)((17.0f/24.0f) * width), (int)((23.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
-		JLabel l_train_input_seats = new JLabel("0", JLabel.RIGHT);
+		l_train_input_seats = new JLabel("0", JLabel.RIGHT);
 		l_train_input_seats.setVerticalAlignment(JLabel.CENTER);
 		l_train_input_seats.setBounds((int)((17.0f/24.0f) * width), (int)((25.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
-		JLabel l_train_input_availableSeats = new JLabel("0", JLabel.RIGHT);
+		l_train_input_availableSeats = new JLabel("0", JLabel.RIGHT);
 		l_train_input_availableSeats.setVerticalAlignment(JLabel.CENTER);
 		l_train_input_availableSeats.setBounds((int)((17.0f/24.0f) * width), (int)((27.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
-		JLabel l_train_input_canMove = new JLabel("YES", JLabel.RIGHT);
+		l_train_input_canMove = new JLabel("NO", JLabel.RIGHT);
 		l_train_input_canMove.setVerticalAlignment(JLabel.CENTER);
 		l_train_input_canMove.setBounds((int)((17.0f/24.0f) * width), (int)((29.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
@@ -312,6 +322,7 @@ public class MainFrame extends JFrame {
 					AddCarriage(lst_createCarriage_rollingStocks.getSelectedValue().toString());
 					ChangeListLabels();
 					RemoveButtonState();
+					RefreshTrainInfo();
 				}
 			}
 		});
@@ -332,6 +343,8 @@ public class MainFrame extends JFrame {
 					trainCarriages.removeLast();
 					RemoveButtonState();
 					
+					RefreshTrainInfo();
+					
 					if (GetLastCar().equals("Passenger Car"))
 					{
 						ChangeList(new String[]{"Passenger Car", "Freight Car"});
@@ -343,6 +356,7 @@ public class MainFrame extends JFrame {
 					else
 					{
 						ChangeList(new String[]{"Locomotive"});
+						l_train_input_canMove.setText("NO");
 					}
 					btn_createCarriage_add.setEnabled(AddButtonState());
 				} 
@@ -374,6 +388,12 @@ public class MainFrame extends JFrame {
 				
 				tf_createCarriage_weight.setValue(new Integer(0));
 				tf_createCarriage_passengers.setValue(new String("0"));
+				
+				//reset train info
+				l_train_input_power.setText("0");
+				l_train_input_weight.setText("0");
+				l_train_input_powerFree.setText("0");
+				l_train_input_canMove.setText("NO");
 			}
 		});
 	}
@@ -514,6 +534,29 @@ public class MainFrame extends JFrame {
 		return false;
 	}
 	
+	private void RefreshTrainInfo()
+	{
+		RollingStock car = dt_carriages.firstCarriage();
+		Integer weight = 0;
+		Integer powerLeft = 0;
+		Integer seats = 0;
+		if(car instanceof Locomotive)
+		{
+			powerLeft = ((Locomotive) car).power() + car.getGrossWeight();
+		}
+		l_train_input_power.setText(powerLeft.toString());
+		while (car != null)
+		{
+			weight += car.getGrossWeight();
+			powerLeft -= car.getGrossWeight();
+			car = dt_carriages.nextCarriage();
+		}
+		l_train_input_weight.setText(weight.toString());
+		l_train_input_powerFree.setText(powerLeft.toString());
+		
+		l_train_input_canMove.setText(powerLeft < 0? "NO" : "Yes");
+	}
+	
 	private void ChangeList(String[] list)
 	{
 		DefaultListModel<String> newModel = new DefaultListModel<String>();
@@ -541,7 +584,7 @@ public class MainFrame extends JFrame {
 		}
 		else
 		{
-			l_createCarriage_passengers.setText("Weight [non-negative]");
+			l_createCarriage_passengers.setText("Power Class [1-9]['D'|'E'|'S']");
 		}
 	}
 }
