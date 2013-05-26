@@ -2,20 +2,28 @@ package asgn2GUI;
 
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import asgn2Exceptions.TrainException;
 import asgn2RollingStock.FreightCar;
 import asgn2RollingStock.Locomotive;
 import asgn2RollingStock.PassengerCar;
+import asgn2RollingStock.RollingStock;
 import asgn2Train.DepartingTrain;
 
-import java.awt.*;
+import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+@SuppressWarnings("serial")
 public class MainFrame extends JFrame {
 	
-	DepartingTrain dt_carriages = new DepartingTrain();
+	private DepartingTrain dt_carriages = new DepartingTrain();
+	
+	private String passengerLabel;
+	
+	JList<String> lst_createCarriage_rollingStocks;
 	
 	public MainFrame(String title, int width, int height)
 	{
@@ -77,17 +85,24 @@ public class MainFrame extends JFrame {
 		l_train.setBorder(b_train);
 		l_train.setBounds((int)((2.0f/3.0f) * width), (int)((1.0f/3.0f) * height), (int)((1.0f/3.0f) * width), (int)((1.0f/3.0f) * height));
 		
+//		final JPopupMenu pop_carriageSelect = new JPopupMenu("Carriage Type");
+//		pop_carriageSelect.setBounds(int)(0.005f * width), (int)((13.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((2.0f/9.0f) * height));
+//		pop_carriageSelect.add(
+		
 		//Lists
-		String[] s_createCarriage_rollingStocks = {"Locomotive", "Passenger Car", "Freight Car"};
-		final JList<?> lst_createCarriage_rollingStocks = new JList<Object>(s_createCarriage_rollingStocks);
+		lst_createCarriage_rollingStocks = new JList<String>(new String[]{"Locomotive"});
 		lst_createCarriage_rollingStocks.setBounds((int)(0.005f * width), (int)((13.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((2.0f/9.0f) * height));
+		lst_createCarriage_rollingStocks.setSelectedIndex(0);
 		
 		//Labels
+			//weight
 		JLabel l_createCarriage_weight = new JLabel("Weight", JLabel.CENTER);
 		l_createCarriage_weight.setVerticalAlignment(JLabel.CENTER);
 		l_createCarriage_weight.setBounds((int)((1.05f/9.0f) * width), (int)((13.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
-		JLabel l_createCarriage_passengers = new JLabel("Seats", JLabel.CENTER);
+				
+		passengerLabel = "Power Class [1-9]['D'|'E'|'S']";
+		JLabel l_createCarriage_passengers = new JLabel(passengerLabel, JLabel.CENTER);
 		l_createCarriage_passengers.setVerticalAlignment(JLabel.CENTER);
 		l_createCarriage_passengers.setBounds((int)((1.05f/9.0f) * width), (int)((15.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
@@ -113,6 +128,7 @@ public class MainFrame extends JFrame {
 		add(l_reset);
 		add(l_currentCarriage);
 		add(l_train);
+		
 		add(l_createCarriage_weight);
 		add(l_createCarriage_passengers);
 		
@@ -123,13 +139,34 @@ public class MainFrame extends JFrame {
 		add(tf_createCarriage_weight);
 		add(tf_createCarriage_passengers);
 		
+		//Add behaviors
+		lst_createCarriage_rollingStocks.addListSelectionListener(new ListSelectionListener()
+		{
+			@Override
+			public void valueChanged(ListSelectionEvent e)
+			{
+				if(e.getValueIsAdjusting())
+				{
+					if(lst_createCarriage_rollingStocks.getSelectedValue().equals("Passenger Car"))
+					{
+						passengerLabel = "Number of seats";
+					}
+					else if (lst_createCarriage_rollingStocks.getSelectedValue().equals("Freight Car"))
+					{
+						passengerLabel = "Goods type";
+					}
+				}
+			}
+		});
+		
 		//Add button behavior
-			//Add carriage button
+			//Add carriage
 		btn_createCarriage_add.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				System.out.println(lst_createCarriage_rollingStocks.getSelectedIndex());
 				//make sure an option is selected
 				if(lst_createCarriage_rollingStocks.getSelectedIndex() >= 0)
 				{
@@ -148,13 +185,17 @@ public class MainFrame extends JFrame {
 		switch(selected.toString())
 		{
 		case "Locomotive":
-			try {
+			remove(lst_createCarriage_rollingStocks);
+			lst_createCarriage_rollingStocks = new JList<String>(new String[]{"Passenger Car", "Freight Car"});
+			add(lst_createCarriage_rollingStocks);
+			try 
+			{
 				dt_carriages.addCarriage(new Locomotive(
 						Integer.parseInt(item1.toString()),
 						item2.toString()
 						));
 			} catch (NumberFormatException | TrainException e1) {
-				e1.printStackTrace();
+//				e1.printStackTrace();
 			}
 			break;
 		case "Passenger Car":
@@ -164,8 +205,7 @@ public class MainFrame extends JFrame {
 						Integer.parseInt(item2.toString())
 						));
 			} catch (NumberFormatException | TrainException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+//				e1.printStackTrace();
 			}
 			break;
 		case "Freight Car":
@@ -175,10 +215,16 @@ public class MainFrame extends JFrame {
 						item2.toString()
 						));
 			} catch (TrainException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+//				e1.printStackTrace();
 			}
 			break;
+		}
+		
+		RollingStock car = dt_carriages.firstCarriage();
+		while (car != null)
+		{
+			System.out.println(car.toString());
+			car = dt_carriages.nextCarriage();
 		}
 	}
 }

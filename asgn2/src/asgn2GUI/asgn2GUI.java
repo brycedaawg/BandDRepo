@@ -17,6 +17,7 @@ public class asgn2GUI {
 				JFrame frame = new MainFrame("Departing Train gooey (gee, you, eye) - Bryce Keifer n8040486, Daniel Rablin n8038848", 1024, 728);
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setVisible(true);
+				frame.setResizable(false);
 			}
 		});
 	}
