@@ -185,7 +185,6 @@ public class MainFrame extends JFrame {
 		switch(selected.toString())
 		{
 		case "Locomotive":
-			remove(lst_createCarriage_rollingStocks);
 			lst_createCarriage_rollingStocks = new JList<String>(new String[]{"Passenger Car", "Freight Car"});
 			add(lst_createCarriage_rollingStocks);
 			try 
