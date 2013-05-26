@@ -3,6 +3,10 @@ package asgn2GUI;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import asgn2Exceptions.TrainException;
+import asgn2RollingStock.FreightCar;
+import asgn2RollingStock.Locomotive;
+import asgn2RollingStock.PassengerCar;
 import asgn2Train.DepartingTrain;
 
 import java.awt.*;
@@ -40,6 +44,11 @@ public class MainFrame extends JFrame {
 		TitledBorder b_currentCarriage = BorderFactory.createTitledBorder("Current Carriage");
 		b_currentCarriage.setTitleJustification(TitledBorder.CENTER);
 		
+		//Scroll Window
+		TitledBorder b_trainDisplay = BorderFactory.createTitledBorder("Trains");
+		b_trainDisplay.setTitleJustification(TitledBorder.CENTER);
+		
+		//Train Window
 		TitledBorder b_train = BorderFactory.createTitledBorder("Train");
 		b_train.setTitleJustification(TitledBorder.CENTER);
 		
@@ -68,12 +77,17 @@ public class MainFrame extends JFrame {
 		l_train.setBorder(b_train);
 		l_train.setBounds((int)((2.0f/3.0f) * width), (int)((1.0f/3.0f) * height), (int)((1.0f/3.0f) * width), (int)((1.0f/3.0f) * height));
 		
+		//Lists
+		String[] s_createCarriage_rollingStocks = {"Locomotive", "Passenger Car", "Freight Car"};
+		final JList<?> lst_createCarriage_rollingStocks = new JList<Object>(s_createCarriage_rollingStocks);
+		lst_createCarriage_rollingStocks.setBounds((int)(0.005f * width), (int)((13.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((2.0f/9.0f) * height));
+		
 		//Labels
 		JLabel l_createCarriage_weight = new JLabel("Weight", JLabel.CENTER);
 		l_createCarriage_weight.setVerticalAlignment(JLabel.CENTER);
 		l_createCarriage_weight.setBounds((int)((1.05f/9.0f) * width), (int)((13.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
-		JLabel l_createCarriage_passengers = new JLabel("Passengers", JLabel.CENTER);
+		JLabel l_createCarriage_passengers = new JLabel("Seats", JLabel.CENTER);
 		l_createCarriage_passengers.setVerticalAlignment(JLabel.CENTER);
 		l_createCarriage_passengers.setBounds((int)((1.05f/9.0f) * width), (int)((15.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
@@ -81,19 +95,15 @@ public class MainFrame extends JFrame {
 		JButton btn_createCarriage_add = new JButton("Add");
 		btn_createCarriage_add.setBounds((int)((2.05f/9.0f) * width), (int)((8.0f/9.0f) * height), (int)((1.0f/10.0f) * width), (int)((1.0f/18.0f) * height));
 		
-		//Lists
-		String[] s_createCarriage_rollingStocks = {"Locomotive", "Passenger Car", "Freight Car"};
-		final JList lst_createCarriage_rollingStocks = new JList(s_createCarriage_rollingStocks);
-		lst_createCarriage_rollingStocks.setBounds((int)(0.005f * width), (int)((13.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((2.0f/9.0f) * height));
-		
 		//Formatted text fields
 			//Weight
 		final JFormattedTextField tf_createCarriage_weight = new JFormattedTextField();
 		tf_createCarriage_weight.setValue(new Integer(0));
 		tf_createCarriage_weight.setBounds((int)((1.05f/9.0f) * width), (int)((14.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
-			//Passengers
+		
+		//Passengers
 		final JFormattedTextField tf_createCarriage_passengers = new JFormattedTextField();
-		tf_createCarriage_passengers.setValue(new Integer(0));
+		tf_createCarriage_passengers.setValue(new String("0"));
 		tf_createCarriage_passengers.setBounds((int)((1.05f/9.0f) * width), (int)((8.0f/9.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
 		//Add swing components to content pane
@@ -118,20 +128,57 @@ public class MainFrame extends JFrame {
 		btn_createCarriage_add.addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				switch(lst_createCarriage_rollingStocks.getSelectedIndex()) {
-				case 0: //locomotive
-					dt_carriages.addCarriage(new Locomotive())
-					break;
-				case 1: //passenger car
-					break;
-				case 2: //freight car
-					break;
+			public void actionPerformed(ActionEvent e)
+			{
+				//make sure an option is selected
+				if(lst_createCarriage_rollingStocks.getSelectedIndex() >= 0)
+				{
+					AddCarriage(lst_createCarriage_rollingStocks.getSelectedValue(), tf_createCarriage_weight.getValue(), tf_createCarriage_passengers.getValue());
 				}
-				//lst_createCarriage_rollingStocks.getSelectedValue()
-				//tf_createCarriage_weight.getValue()
-				//tf_createCarriage_passengers.getValue()
+				
+//				lst_createCarriage_rollingStocks.getSelectedValue()
+//				tf_createCarriage_weight.getValue()
+//				tf_createCarriage_passengers.getValue()
 			}
 		});
+	}
+	
+	private void AddCarriage(Object selected, Object item1, Object item2)
+	{
+		switch(selected.toString())
+		{
+		case "Locomotive":
+			try {
+				dt_carriages.addCarriage(new Locomotive(
+						Integer.parseInt(item1.toString()),
+						item2.toString()
+						));
+			} catch (NumberFormatException | TrainException e1) {
+				e1.printStackTrace();
+			}
+			break;
+		case "Passenger Car":
+			try {
+				dt_carriages.addCarriage(new PassengerCar(
+						Integer.parseInt(item1.toString()),
+						Integer.parseInt(item2.toString())
+						));
+			} catch (NumberFormatException | TrainException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			break;
+		case "Freight Car":
+			try {
+				dt_carriages.addCarriage(new FreightCar(
+						Integer.parseInt(item1.toString()),
+						item2.toString()
+						));
+			} catch (TrainException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			break;
+		}
 	}
 }
