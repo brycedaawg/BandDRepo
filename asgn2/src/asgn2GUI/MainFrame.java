@@ -2,9 +2,12 @@ package asgn2GUI;
 
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import asgn2Exceptions.TrainException;
 import asgn2RollingStock.FreightCar;
 import asgn2RollingStock.Locomotive;
@@ -14,15 +17,21 @@ import asgn2Train.DepartingTrain;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
 	
 	private DepartingTrain dt_carriages = new DepartingTrain();
 	
-	private String passengerLabel;
-	
-	JList<String> lst_createCarriage_rollingStocks;
+	private JList<String> lst_createCarriage_rollingStocks;
+	private JFormattedTextField tf_createCarriage_weight;
+	private JFormattedTextField tf_createCarriage_passengers;
+	private JLabel l_createCarriage_passengers;
+	private JButton btn_createCarriage_add;
 	
 	public MainFrame(String title, int width, int height)
 	{
@@ -84,41 +93,36 @@ public class MainFrame extends JFrame {
 		l_train.setBorder(b_train);
 		l_train.setBounds((int)((2.0f/3.0f) * width), (int)((1.0f/3.0f) * height), (int)((1.0f/3.0f) * width), (int)((1.0f/3.0f) * height));
 		
-//		final JPopupMenu pop_carriageSelect = new JPopupMenu("Carriage Type");
-//		pop_carriageSelect.setBounds(int)(0.005f * width), (int)((13.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((2.0f/9.0f) * height));
-//		pop_carriageSelect.add(
-		
 		//Lists
 		lst_createCarriage_rollingStocks = new JList<String>(new String[]{"Locomotive"});
-		lst_createCarriage_rollingStocks.setBounds((int)(0.005f * width), (int)((13.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((2.0f/9.0f) * height));
+		lst_createCarriage_rollingStocks.setBounds((int)(0.005f * width), (int)((13.0f/18.0f) * height), (int)((1.0f/11.0f) * width), (int)((2.0f/9.0f) * height));
 		lst_createCarriage_rollingStocks.setSelectedIndex(0);
 		
 		//Labels
 			//weight
-		JLabel l_createCarriage_weight = new JLabel("Weight", JLabel.CENTER);
+		JLabel l_createCarriage_weight = new JLabel("Weight [non-negative]", JLabel.LEFT);
 		l_createCarriage_weight.setVerticalAlignment(JLabel.CENTER);
-		l_createCarriage_weight.setBounds((int)((1.05f/9.0f) * width), (int)((13.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
-		
-				
-		passengerLabel = "Power Class [1-9]['D'|'E'|'S']";
-		JLabel l_createCarriage_passengers = new JLabel(passengerLabel, JLabel.CENTER);
+		l_createCarriage_weight.setBounds((int)((1.0f/9.0f) * width), (int)((13.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+
+		l_createCarriage_passengers = new JLabel("Power Class [1-9]['D'|'E'|'S']", JLabel.LEFT);
 		l_createCarriage_passengers.setVerticalAlignment(JLabel.CENTER);
-		l_createCarriage_passengers.setBounds((int)((1.05f/9.0f) * width), (int)((15.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		l_createCarriage_passengers.setBounds((int)((1.0f/9.0f) * width), (int)((15.0f/18.0f) * height), (int)((1.0f/5.0f) * width), (int)((1.0f/18.0f) * height));
 		
 		//Buttons
-		JButton btn_createCarriage_add = new JButton("Add");
+		btn_createCarriage_add = new JButton("Add");
 		btn_createCarriage_add.setBounds((int)((2.05f/9.0f) * width), (int)((8.0f/9.0f) * height), (int)((1.0f/10.0f) * width), (int)((1.0f/18.0f) * height));
+		btn_createCarriage_add.setEnabled(false);
 		
 		//Formatted text fields
 			//Weight
-		final JFormattedTextField tf_createCarriage_weight = new JFormattedTextField();
+		tf_createCarriage_weight = new JFormattedTextField();
 		tf_createCarriage_weight.setValue(new Integer(0));
-		tf_createCarriage_weight.setBounds((int)((1.05f/9.0f) * width), (int)((14.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		tf_createCarriage_weight.setBounds((int)((1.0f/9.0f) * width), (int)((14.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
 		//Passengers
-		final JFormattedTextField tf_createCarriage_passengers = new JFormattedTextField();
+		tf_createCarriage_passengers = new JFormattedTextField();
 		tf_createCarriage_passengers.setValue(new String("0"));
-		tf_createCarriage_passengers.setBounds((int)((1.05f/9.0f) * width), (int)((8.0f/9.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		tf_createCarriage_passengers.setBounds((int)((1.0f/9.0f) * width), (int)((8.0f/9.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
 		//Add swing components to content pane
 		add(l_createCarriage);
@@ -146,15 +150,51 @@ public class MainFrame extends JFrame {
 			{
 				if(e.getValueIsAdjusting())
 				{
+					btn_createCarriage_add.setEnabled(CheckTextValues(lst_createCarriage_rollingStocks.getSelectedValue().toString()));
+					
 					if(lst_createCarriage_rollingStocks.getSelectedValue().equals("Passenger Car"))
 					{
-						passengerLabel = "Number of seats";
+						l_createCarriage_passengers.setText("Number of seats [non-negative]");
 					}
 					else if (lst_createCarriage_rollingStocks.getSelectedValue().equals("Freight Car"))
 					{
-						passengerLabel = "Goods type";
+						l_createCarriage_passengers.setText("Goods type ['D'|'G'|'R']");
 					}
 				}
+			}
+		});
+		
+		tf_createCarriage_weight.addKeyListener(new KeyListener()
+		{
+			@Override
+			public void keyTyped(KeyEvent arg0) { }
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) { update(); }
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) { }
+			
+			public void update()
+			{
+				btn_createCarriage_add.setEnabled(CheckTextValues(lst_createCarriage_rollingStocks.getSelectedValue().toString()));
+			}
+		});
+		
+		tf_createCarriage_passengers.addKeyListener(new KeyListener()
+		{
+			@Override
+			public void keyTyped(KeyEvent arg0) { }
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) { update(); }
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) { }
+			
+			public void update()
+			{
+				btn_createCarriage_add.setEnabled(CheckTextValues(lst_createCarriage_rollingStocks.getSelectedValue().toString()));
 			}
 		});
 		
@@ -165,38 +205,26 @@ public class MainFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				System.out.println(lst_createCarriage_rollingStocks.getSelectedIndex());
 				//make sure an option is selected
 				if(lst_createCarriage_rollingStocks.getSelectedIndex() >= 0)
 				{
-					AddCarriage(lst_createCarriage_rollingStocks.getSelectedValue(), tf_createCarriage_weight.getValue(), tf_createCarriage_passengers.getValue());
+					AddCarriage(lst_createCarriage_rollingStocks.getSelectedValue().toString());
 				}
-				
-//				lst_createCarriage_rollingStocks.getSelectedValue()
-//				tf_createCarriage_weight.getValue()
-//				tf_createCarriage_passengers.getValue()
 			}
 		});
 	}
 	
-	private void AddCarriage(Object selected, Object item1, Object item2)
+	private void AddCarriage(String selected)
 	{
-		switch(selected.toString())
+		switch(selected)
 		{
 		case "Locomotive":
-//			lst_createCarriage_rollingStocks.
-//			lst_createCarriage_rollingStocks = new JList<String>(new String[]{"Passenger Car", "Freight Car"});
-			DefaultListModel<String> newModel = new DefaultListModel<String>();
-			newModel.addElement("Passenger Car");
-			newModel.addElement("Freight Car");
-			lst_createCarriage_rollingStocks.setModel(newModel);
-			validate();
-			repaint();
+			ChangeList(new String[]{"Passenger Car", "Freight Car"});
 			try 
 			{
 				dt_carriages.addCarriage(new Locomotive(
-						Integer.parseInt(item1.toString()),
-						item2.toString()
+						Integer.parseInt(tf_createCarriage_weight.getText().toString()),
+						tf_createCarriage_passengers.getText().toString()
 						));
 			} catch (NumberFormatException | TrainException e1) {
 //				e1.printStackTrace();
@@ -205,18 +233,19 @@ public class MainFrame extends JFrame {
 		case "Passenger Car":
 			try {
 				dt_carriages.addCarriage(new PassengerCar(
-						Integer.parseInt(item1.toString()),
-						Integer.parseInt(item2.toString())
+						Integer.parseInt(tf_createCarriage_weight.getText().toString()),
+						Integer.parseInt(tf_createCarriage_passengers.getText().toString())
 						));
 			} catch (NumberFormatException | TrainException e1) {
 //				e1.printStackTrace();
 			}
 			break;
 		case "Freight Car":
+			ChangeList(new String[]{"Freight Car"});
 			try {
 				dt_carriages.addCarriage(new FreightCar(
-						Integer.parseInt(item1.toString()),
-						item2.toString()
+						Integer.parseInt(tf_createCarriage_weight.getText().toString()),
+						tf_createCarriage_passengers.getText().toString()
 						));
 			} catch (TrainException e1) {
 //				e1.printStackTrace();
@@ -230,5 +259,64 @@ public class MainFrame extends JFrame {
 			System.out.println(car.toString());
 			car = dt_carriages.nextCarriage();
 		}
+	}
+	
+	private Boolean CheckTextValues(String selected)
+	{
+		System.out.println(tf_createCarriage_weight.getText());
+		System.out.println(tf_createCarriage_passengers.getText());
+		try
+		{
+			if(Integer.parseInt(tf_createCarriage_weight.getText().toString()) >= 0)
+			{
+				String str;
+				switch(selected.toString())
+				{
+				case "Locomotive":
+					str = tf_createCarriage_passengers.getText();
+					if(str.length() == 2)
+					{
+						if(Integer.valueOf(str.substring(0, 1)) >= 1 || Integer.valueOf(str.substring(0, 1)) <= 9)
+						{
+							if(str.substring(1).equals("S") || str.substring(1).equals("D") || str.substring(1).equals("E"))
+							{
+								return true;
+							}
+						}
+					}
+					break;
+				case "Passenger Car":
+					if(Integer.parseInt(tf_createCarriage_passengers.getText()) >= 0)
+					{
+						return true;
+					}
+					break;
+				case "Freight Car":
+					str = tf_createCarriage_passengers.getText();
+					if(str.length() == 1)
+					{
+						if(str.equals("G") || str.equals("R") || str.equals("D"))
+						{
+							return true;
+						}
+					}
+					break;
+				}
+			}
+		}
+		catch (NumberFormatException e) { }
+		return false;
+	}
+	
+	private void ChangeList(String[] list)
+	{
+		DefaultListModel<String> newModel = new DefaultListModel<String>();
+		for(String s : list)
+		{
+			newModel.addElement(s);
+		}
+		lst_createCarriage_rollingStocks.setModel(newModel);
+		validate();
+		repaint();
 	}
 }
