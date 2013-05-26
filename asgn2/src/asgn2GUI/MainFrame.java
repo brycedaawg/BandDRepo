@@ -2,12 +2,21 @@ package asgn2GUI;
 
 import javax.swing.*;
 import javax.swing.border.*;
+
+import asgn2Train.DepartingTrain;
+
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MainFrame extends JFrame {
 	
+	DepartingTrain dt_carriages = new DepartingTrain();
+	
 	public MainFrame(String title, int width, int height)
 	{
+		super(title);
+		
 		setSize(width, height);
 		
 		//Set layout manager
@@ -62,25 +71,30 @@ public class MainFrame extends JFrame {
 		//Labels
 		JLabel l_createCarriage_weight = new JLabel("Weight", JLabel.CENTER);
 		l_createCarriage_weight.setVerticalAlignment(JLabel.CENTER);
-		l_createCarriage_weight.setBounds((int)((1.0f/9.0f) * width), (int)((13.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		l_createCarriage_weight.setBounds((int)((1.05f/9.0f) * width), (int)((13.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
 		JLabel l_createCarriage_passengers = new JLabel("Passengers", JLabel.CENTER);
 		l_createCarriage_passengers.setVerticalAlignment(JLabel.CENTER);
-		l_createCarriage_passengers.setBounds((int)((1.0f/9.0f) * width), (int)((15.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		l_createCarriage_passengers.setBounds((int)((1.05f/9.0f) * width), (int)((15.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
 		//Buttons
 		JButton btn_createCarriage_add = new JButton("Add");
-		btn_createCarriage_add.setBounds((int)((2.0f/9.0f) * width), (int)((8.0f/9.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		btn_createCarriage_add.setBounds((int)((2.05f/9.0f) * width), (int)((8.0f/9.0f) * height), (int)((1.0f/10.0f) * width), (int)((1.0f/18.0f) * height));
 		
 		//Lists
 		String[] s_createCarriage_rollingStocks = {"Locomotive", "Passenger Car", "Freight Car"};
-		JList lst_createCarriage_rollingStocks = new JList(s_createCarriage_rollingStocks);
-		lst_createCarriage_rollingStocks.setBounds((int)(0.0f * width), (int)((13.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((2.0f/9.0f) * height));
+		final JList lst_createCarriage_rollingStocks = new JList(s_createCarriage_rollingStocks);
+		lst_createCarriage_rollingStocks.setBounds((int)(0.005f * width), (int)((13.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((2.0f/9.0f) * height));
 		
 		//Formatted text fields
-		JFormattedTextField tf_createCarriage_weight = new JFormattedTextField();
+			//Weight
+		final JFormattedTextField tf_createCarriage_weight = new JFormattedTextField();
 		tf_createCarriage_weight.setValue(new Integer(0));
-		tf_createCarriage_weight.setBounds((int)((1.0f/9.0f) * width), (int)((14.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		tf_createCarriage_weight.setBounds((int)((1.05f/9.0f) * width), (int)((14.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+			//Passengers
+		final JFormattedTextField tf_createCarriage_passengers = new JFormattedTextField();
+		tf_createCarriage_passengers.setValue(new Integer(0));
+		tf_createCarriage_passengers.setBounds((int)((1.05f/9.0f) * width), (int)((8.0f/9.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
 		//Add swing components to content pane
 		add(l_createCarriage);
@@ -97,5 +111,27 @@ public class MainFrame extends JFrame {
 		add(lst_createCarriage_rollingStocks);
 		
 		add(tf_createCarriage_weight);
+		add(tf_createCarriage_passengers);
+		
+		//Add button behavior
+			//Add carriage button
+		btn_createCarriage_add.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				switch(lst_createCarriage_rollingStocks.getSelectedIndex()) {
+				case 0: //locomotive
+					dt_carriages.addCarriage(new Locomotive())
+					break;
+				case 1: //passenger car
+					break;
+				case 2: //freight car
+					break;
+				}
+				//lst_createCarriage_rollingStocks.getSelectedValue()
+				//tf_createCarriage_weight.getValue()
+				//tf_createCarriage_passengers.getValue()
+			}
+		});
 	}
 }

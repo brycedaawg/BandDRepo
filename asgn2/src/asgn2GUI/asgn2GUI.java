@@ -14,7 +14,7 @@ public class asgn2GUI {
 		{
 			public void run()
 			{
-				JFrame frame = new MainFrame("Hello world", 1024, 728);
+				JFrame frame = new MainFrame("Departing Train gooey (gee, you, eye) - Bryce Keifer n8040486, Daniel Rablin n8038848", 1024, 728);
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setVisible(true);
 			}
