@@ -21,6 +21,8 @@ public class FreightCar extends RollingStock
 	{
 		super(grossWeight);
 		
+		goodsType = goodsType.toUpperCase();
+		
 		if(goodsType.length() != 1)
 		{
 			throw new TrainException("Goods Type code is invalid.");

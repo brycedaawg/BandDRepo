@@ -22,6 +22,8 @@ public class Locomotive extends RollingStock {
 	{
 		super(grossWeight);
 		
+		classification = classification.toUpperCase();
+		
 		if(classification.length() < 0 || classification.length() > 2 )
 		{
 			throw new TrainException("Classification code is invalid.");
@@ -39,7 +41,7 @@ public class Locomotive extends RollingStock {
 		}
 		else
 		{
-			throw new TrainException("Engine type must be 'E' or 'D' or 'S'.");
+			throw new TrainException("Engine type must be 'D' or 'E' or 'S'.");
 		}
 		
 	}
