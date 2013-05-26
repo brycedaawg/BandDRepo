@@ -28,7 +28,8 @@ public class MainFrame extends JFrame {
 	//labels and lists
 	private JList<String> lst_createCarriage_rollingStocks;
 	private JFormattedTextField tf_createCarriage_weight;
-	private JFormattedTextField tf_createCarriage_passengers;
+	private JFormattedTextField tf_createCarriage_secondary;
+	private JFormattedTextField tf_boardPassengers_passengers;
 	private JLabel l_createCarriage_passengers;
 	private JScrollPane trainScrollPane;
 	private JPanel trainPanel;
@@ -196,6 +197,7 @@ public class MainFrame extends JFrame {
 		
 		btn_boardPassengers_board = new JButton("Board");
 		btn_boardPassengers_board.setBounds((int)((21.0f/24.0f) * width), (int)((26.0f/36.0f) * height), (int)((3.0f/36.0f) * width), (int)((1.0f/18.0f) * height));
+		btn_boardPassengers_board.setEnabled(false);
 		
 		JButton btn_reset_reset = new JButton("Reset");
 		btn_reset_reset.setBounds((int)((17.0f/24.0f) * width), (int)((32.0f/36.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
@@ -206,13 +208,13 @@ public class MainFrame extends JFrame {
 		tf_createCarriage_weight.setValue(new Integer(0));
 		tf_createCarriage_weight.setBounds((int)((1.0f/9.0f) * width), (int)((14.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
-		//Passengers
-		tf_createCarriage_passengers = new JFormattedTextField();
-		tf_createCarriage_passengers.setValue(new String("0"));
-		tf_createCarriage_passengers.setBounds((int)((1.0f/9.0f) * width), (int)((8.0f/9.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+			//Power Class/Passenger Seats/Goods Type
+		tf_createCarriage_secondary = new JFormattedTextField();
+		tf_createCarriage_secondary.setValue(new String("0"));
+		tf_createCarriage_secondary.setBounds((int)((1.0f/9.0f) * width), (int)((8.0f/9.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
-		//Board passengers
-		final JFormattedTextField tf_boardPassengers_passengers = new JFormattedTextField();
+			//Boarding passengers
+		tf_boardPassengers_passengers = new JFormattedTextField();
 		tf_boardPassengers_passengers.setValue(new Integer(0));
 		tf_boardPassengers_passengers.setHorizontalAlignment(JTextField.RIGHT);
 		tf_boardPassengers_passengers.setBounds((int)((17.0f/24.0f) * width), (int)((26.0f/36.0f) * height), (int)((3.0f/18.0f) * width), (int)((1.0f/18.0f) * height));
@@ -258,7 +260,7 @@ public class MainFrame extends JFrame {
 		add(lst_createCarriage_rollingStocks);
 		
 		add(tf_createCarriage_weight);
-		add(tf_createCarriage_passengers);
+		add(tf_createCarriage_secondary);
 		add(tf_boardPassengers_passengers);
 		
 		add(trainScrollPane);
@@ -293,7 +295,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
-		tf_createCarriage_passengers.addKeyListener(new KeyListener()
+		tf_createCarriage_secondary.addKeyListener(new KeyListener()
 		{
 			@Override
 			public void keyTyped(KeyEvent arg0) { }
@@ -323,6 +325,7 @@ public class MainFrame extends JFrame {
 					ChangeListLabels();
 					RemoveButtonState();
 					RefreshTrainInfo();
+					BoardButtonState();
 				}
 			}
 		});
@@ -342,6 +345,7 @@ public class MainFrame extends JFrame {
 					repaint();
 					trainCarriages.removeLast();
 					RemoveButtonState();
+					BoardButtonState();
 					
 					RefreshTrainInfo();
 					
@@ -387,13 +391,36 @@ public class MainFrame extends JFrame {
 				ChangeList(new String[]{"Locomotive"});
 				
 				tf_createCarriage_weight.setValue(new Integer(0));
-				tf_createCarriage_passengers.setValue(new String("0"));
+				tf_createCarriage_secondary.setValue(new String("0"));
 				
 				//reset train info
 				l_train_input_power.setText("0");
 				l_train_input_weight.setText("0");
 				l_train_input_powerFree.setText("0");
+				l_train_input_passengers.setText("0");
+				l_train_input_seats.setText("0");
+				l_train_input_availableSeats.setText("0");
 				l_train_input_canMove.setText("NO");
+			}
+		});
+		
+		btn_boardPassengers_board.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				System.out.println(tf_boardPassengers_passengers.getText());
+				try
+				{
+					dt_carriages.board(Integer.parseInt((tf_boardPassengers_passengers.getText())));
+					RefreshTrainInfo();
+					btn_createCarriage_add.setEnabled(false);
+					btn_removeCarriage_remove.setEnabled(false);
+				}
+				catch (NumberFormatException | TrainException e)
+				{
+					e.printStackTrace();
+				}
 			}
 		});
 	}
@@ -418,7 +445,7 @@ public class MainFrame extends JFrame {
 			{
 				dt_carriages.addCarriage(new Locomotive(
 						Integer.parseInt(tf_createCarriage_weight.getText().toString()),
-						tf_createCarriage_passengers.getText().toString()
+						tf_createCarriage_secondary.getText().toString()
 						));
 				
 				ChangeList(new String[]{"Passenger Car", "Freight Car"});
@@ -433,7 +460,7 @@ public class MainFrame extends JFrame {
 			try {
 				dt_carriages.addCarriage(new PassengerCar(
 						Integer.parseInt(tf_createCarriage_weight.getText().toString()),
-						Integer.parseInt(tf_createCarriage_passengers.getText().toString())
+						Integer.parseInt(tf_createCarriage_secondary.getText().toString())
 						));
 				
 				//Set up train label as passenger car
@@ -448,7 +475,7 @@ public class MainFrame extends JFrame {
 			try {
 				dt_carriages.addCarriage(new FreightCar(
 						Integer.parseInt(tf_createCarriage_weight.getText().toString()),
-						tf_createCarriage_passengers.getText().toString()
+						tf_createCarriage_secondary.getText().toString()
 						));
 
 				ChangeList(new String[]{"Freight Car"});
@@ -493,13 +520,17 @@ public class MainFrame extends JFrame {
 	{
 		try
 		{
-			if(Integer.parseInt(tf_createCarriage_weight.getText().toString()) >= 0)
+			if(Integer.parseInt(l_train_input_passengers.getText()) > 0)
+			{
+				return false;
+			}
+			else if(Integer.parseInt(tf_createCarriage_weight.getText().toString()) >= 0)
 			{
 				String str;
 				switch(lst_createCarriage_rollingStocks.getSelectedValue().toString())
 				{
 				case "Locomotive":
-					str = tf_createCarriage_passengers.getText().toUpperCase();
+					str = tf_createCarriage_secondary.getText().toUpperCase();
 					if(str.length() == 2)
 					{
 						if(Integer.valueOf(str.substring(0, 1)) >= 1 || Integer.valueOf(str.substring(0, 1)) <= 9)
@@ -512,13 +543,13 @@ public class MainFrame extends JFrame {
 					}
 					break;
 				case "Passenger Car":
-					if(Integer.parseInt(tf_createCarriage_passengers.getText()) >= 0)
+					if(Integer.parseInt(tf_createCarriage_secondary.getText()) >= 0)
 					{
 						return true;
 					}
 					break;
 				case "Freight Car":
-					str = tf_createCarriage_passengers.getText().toUpperCase();
+					str = tf_createCarriage_secondary.getText().toUpperCase();
 					if(str.length() == 1)
 					{
 						if(str.equals("G") || str.equals("R") || str.equals("D"))
@@ -534,12 +565,18 @@ public class MainFrame extends JFrame {
 		return false;
 	}
 	
+	private void BoardButtonState()
+	{
+		btn_boardPassengers_board.setEnabled(GetLastCar().equals("Passenger Car"));
+	}
+	
 	private void RefreshTrainInfo()
 	{
 		RollingStock car = dt_carriages.firstCarriage();
 		Integer weight = 0;
 		Integer powerLeft = 0;
 		Integer seats = 0;
+		Integer seatsTaken = 0;
 		if(car instanceof Locomotive)
 		{
 			powerLeft = ((Locomotive) car).power() + car.getGrossWeight();
@@ -547,13 +584,21 @@ public class MainFrame extends JFrame {
 		l_train_input_power.setText(powerLeft.toString());
 		while (car != null)
 		{
+			if(car instanceof PassengerCar)
+			{
+				seats += ((PassengerCar) car).numberOfSeats();
+				seatsTaken += ((PassengerCar) car).numberOnBoard();
+			}
 			weight += car.getGrossWeight();
 			powerLeft -= car.getGrossWeight();
 			car = dt_carriages.nextCarriage();
 		}
 		l_train_input_weight.setText(weight.toString());
 		l_train_input_powerFree.setText(powerLeft.toString());
-		
+		l_train_input_passengers.setText(seatsTaken.toString());
+		l_train_input_seats.setText(seats.toString());
+		Integer seatsLeft = seats - seatsTaken;
+		l_train_input_availableSeats.setText(seatsLeft.toString());
 		l_train_input_canMove.setText(powerLeft < 0? "NO" : "Yes");
 	}
 	
