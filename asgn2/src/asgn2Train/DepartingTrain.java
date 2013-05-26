@@ -1,5 +1,3 @@
-//@author Bryce Kiefer N8040486
-
 package asgn2Train;
 
 import java.util.Iterator;
@@ -12,6 +10,9 @@ import asgn2RollingStock.Locomotive;
 import asgn2RollingStock.PassengerCar;
 import asgn2RollingStock.RollingStock;
 
+/**
+ * @author Bryce Kiefer N8040486
+ */
 public class DepartingTrain extends Object
 {
 	private LinkedList<RollingStock> carriages;

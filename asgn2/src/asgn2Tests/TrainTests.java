@@ -1,7 +1,3 @@
-/* @author			Bryce Kiefer
- * 
- */
-
 package asgn2Tests;
 
 import static org.junit.Assert.*;
@@ -18,6 +14,9 @@ import asgn2RollingStock.Locomotive;
 import asgn2RollingStock.PassengerCar;
 import asgn2Train.DepartingTrain;
 
+/**
+ * @author Bryce Kiefer N8040486
+ */
 public class TrainTests {
 
 	static DepartingTrain train;
