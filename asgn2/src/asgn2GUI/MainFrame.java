@@ -290,7 +290,7 @@ public class MainFrame extends JFrame {
 		//Formatted text fields
 			//Weight
 		tf_createCarriage_weight = new JFormattedTextField();
-		tf_createCarriage_weight.setValue(new Integer(0));
+		tf_createCarriage_weight.setValue(new String("0"));
 		tf_createCarriage_weight.setHorizontalAlignment(JTextField.RIGHT);
 		tf_createCarriage_weight.setBounds((int)((1.0f/9.0f) * width), (int)((14.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
@@ -302,7 +302,7 @@ public class MainFrame extends JFrame {
 		
 			//Boarding passengers
 		tf_boardPassengers_passengers = new JFormattedTextField();
-		tf_boardPassengers_passengers.setValue(new Integer(0));
+		tf_boardPassengers_passengers.setValue(new String("0"));
 		tf_boardPassengers_passengers.setHorizontalAlignment(JTextField.RIGHT);
 		tf_boardPassengers_passengers.setBounds((int)((17.0f/24.0f) * width), (int)((26.0f/36.0f) * height), (int)((3.0f/18.0f) * width), (int)((1.0f/18.0f) * height));
 		
@@ -457,18 +457,18 @@ public class MainFrame extends JFrame {
 					
 					RefreshTrainInfo();
 					
-					if (GetLastCar().equals("Passenger Car"))
+					if(dt_carriages.firstCarriage() == null)
+					{
+						ChangeList(new String[]{"Locomotive"});
+						l_train_input_canMove.setText("Yes");
+					}
+					else if (GetLastCar().equals("Passenger Car") || GetLastCar().equals("Locomotive"))
 					{
 						ChangeList(new String[]{"Passenger Car", "Freight Car"});
 					}
 					else if (GetLastCar().equals("Freight Car"))
 					{
 						ChangeList(new String[]{"Freight Car"});
-					}
-					else
-					{
-						ChangeList(new String[]{"Locomotive"});
-						l_train_input_canMove.setText("Yes");
 					}
 					btn_createCarriage_add.setEnabled(AddButtonState());
 				} 
@@ -670,7 +670,7 @@ public class MainFrame extends JFrame {
 			try 
 			{
 				dt_carriages.addCarriage(new Locomotive(
-						Integer.parseInt(tf_createCarriage_weight.getText().toString()),
+						Integer.parseInt((tf_createCarriage_weight.getText().replaceAll(",",""))),
 						tf_createCarriage_secondary.getText().toString()
 						));
 				
@@ -686,7 +686,7 @@ public class MainFrame extends JFrame {
 		case "Passenger Car":
 			try {
 				dt_carriages.addCarriage(new PassengerCar(
-						Integer.parseInt(tf_createCarriage_weight.getText().toString()),
+						Integer.parseInt(tf_createCarriage_weight.getText()),
 						Integer.parseInt(tf_createCarriage_secondary.getText().toString())
 						));
 				
@@ -701,7 +701,7 @@ public class MainFrame extends JFrame {
 		case "Freight Car":
 			try {
 				dt_carriages.addCarriage(new FreightCar(
-						Integer.parseInt(tf_createCarriage_weight.getText().toString()),
+						Integer.parseInt(tf_createCarriage_weight.getText()),
 						tf_createCarriage_secondary.getText().toString()
 						));
 
