@@ -1,5 +1,3 @@
-//Test comment
-
 package asgn2GUI;
 
 import javax.swing.*;
@@ -532,6 +530,8 @@ public class MainFrame extends JFrame {
 						btn_createCarriage_add.setEnabled(false);
 						btn_removeCarriage_remove.setEnabled(false);
 					}
+					
+					UpdateCurrentCarriageStatistics(GetCarriageByIndex(currentCarriageIndex));
 				}
 				catch (NumberFormatException | TrainException e)
 				{
