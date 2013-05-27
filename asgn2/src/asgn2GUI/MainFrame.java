@@ -673,11 +673,11 @@ public class MainFrame extends JFrame {
 			{
 				dt_carriages.addCarriage(new Locomotive(
 						Integer.parseInt((tf_createCarriage_weight.getText().replaceAll(",",""))),
-						tf_createCarriage_secondary.getText().toString()
+						tf_createCarriage_secondary.getText()
 						));
 				
 				ChangeList(new String[]{"Passenger Car", "Freight Car"});
-				trainLabel.setText("Locomotive");
+				trainLabel.setText("Locomotive (" + tf_createCarriage_secondary.getText().toUpperCase() + ')');
 				trainLabel.setBackground(new Color(255,255,0));
 				UpdateCurrentCarriageStatistics(dt_carriages.firstCarriage());
 				
@@ -710,8 +710,8 @@ public class MainFrame extends JFrame {
 				ChangeList(new String[]{"Freight Car"});
 				
 				//Set up train label as freight car
-				trainLabel.setText("Freight Car");
-				trainLabel.setBackground(new Color(0,0,255));
+				trainLabel.setText("Freight Car (" + tf_createCarriage_secondary.getText().toUpperCase() + ')');
+				trainLabel.setBackground(new Color(0,255,255));
 				
 			} catch (TrainException e1) {
 //				e1.printStackTrace();
