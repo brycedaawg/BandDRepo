@@ -645,10 +645,9 @@ public class MainFrame extends JFrame {
 		return c;
 	}
 	
-	private void AddCarriage(String selected)
+	private JButton CreateTrainLabel()
 	{
 		//Create a new train label to add to the GUI
-		
 		JButton trainLabel = new JButton("");		
 		trainLabel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
@@ -665,7 +664,11 @@ public class MainFrame extends JFrame {
 		trainPanel.add(trainLabel);
 		carriageCount++;
 		trainPanel.setPreferredSize(new Dimension(carriageCount * 210 + 10, trainPanel.getPreferredSize().height));
-		
+		return trainLabel;
+	}
+	
+	private void AddCarriage(String selected)
+	{
 		switch(selected)
 		{
 		case "Locomotive":
@@ -676,6 +679,7 @@ public class MainFrame extends JFrame {
 						tf_createCarriage_secondary.getText()
 						));
 				
+				JButton trainLabel = CreateTrainLabel();
 				ChangeList(new String[]{"Passenger Car", "Freight Car"});
 				trainLabel.setText("Locomotive (" + tf_createCarriage_secondary.getText().toUpperCase() + ')');
 				trainLabel.setBackground(new Color(255,255,0));
@@ -693,6 +697,7 @@ public class MainFrame extends JFrame {
 						));
 				
 				//Set up train label as passenger car
+				JButton trainLabel = CreateTrainLabel();
 				trainLabel.setText("Passenger Car");
 				trainLabel.setBackground(new Color(255,0,0));
 				
@@ -710,7 +715,8 @@ public class MainFrame extends JFrame {
 				ChangeList(new String[]{"Freight Car"});
 				
 				//Set up train label as freight car
-				trainLabel.setText("Freight Car (" + tf_createCarriage_secondary.getText().toUpperCase() + ')');
+				JButton trainLabel = CreateTrainLabel();
+				trainLabel.setText("Freight Car");
 				trainLabel.setBackground(new Color(0,255,255));
 				
 			} catch (TrainException e1) {
