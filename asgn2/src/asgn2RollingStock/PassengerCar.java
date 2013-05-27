@@ -33,9 +33,12 @@ public class PassengerCar extends RollingStock
 			throw new TrainException("Amount of passengers can not be negative.");
 		}
 		
-		if(newPassengers > (seatNum-seatsTaken))
+		int seatsAvailable = seatNum - seatsTaken;
+		if(newPassengers > seatsAvailable)
 		{
-			return seatsTaken += newPassengers -= seatNum-seatsTaken;
+			//return seatsTaken += newPassengers -= seatNum-seatsTaken;
+			seatsTaken = seatNum;
+			return newPassengers - seatsAvailable;
 		}
 		else	
 		{
