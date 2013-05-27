@@ -22,8 +22,6 @@ import java.util.LinkedList;
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
 	
-	int selection = 0;
-	
 	//object definitions
 	private DepartingTrain dt_carriages = new DepartingTrain();
 	
@@ -39,6 +37,7 @@ public class MainFrame extends JFrame {
 	
 	private JLabel l_currentCarriage_type;
 	private JLabel l_currentCarriage_weight;
+	private JLabel l_currentCarriage_carriageNumber;
 	private JLabel l_currentCarriage_powerOutput;
 	private JLabel l_currentCarriage_passengerLoad;
 	private JLabel l_currentCarriage_seatsAvailable;
@@ -46,6 +45,7 @@ public class MainFrame extends JFrame {
 	
 	private JLabel l_currentCarriage_input_type;
 	private JLabel l_currentCarriage_input_weight;
+	private JLabel l_currentCarriage_input_carriageNumber;
 	private JLabel l_currentCarriage_input_powerOutput;
 	private JLabel l_currentCarriage_input_passengerLoad;
 	private JLabel l_currentCarriage_input_seatsAvailable;
@@ -68,6 +68,7 @@ public class MainFrame extends JFrame {
 	
 	//misc helping
 	private int carriageCount = 0;
+	private int currentCarriageIndex = 0;
 	
 	public MainFrame(String title, int width, int height)
 	{
@@ -155,21 +156,25 @@ public class MainFrame extends JFrame {
 		l_currentCarriage_weight.setVerticalAlignment(JLabel.CENTER);
 		l_currentCarriage_weight.setBounds((int)((17.0f/24.0f) * width), (int)((3.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
+		l_currentCarriage_carriageNumber = new JLabel("Carriage Number:", JLabel.LEFT);
+		l_currentCarriage_carriageNumber.setVerticalAlignment(JLabel.CENTER);
+		l_currentCarriage_carriageNumber.setBounds((int)((17.0f/24.0f) * width), (int)((5.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		
 		l_currentCarriage_powerOutput = new JLabel("Power Output:", JLabel.LEFT);
 		l_currentCarriage_powerOutput.setVerticalAlignment(JLabel.CENTER);
-		l_currentCarriage_powerOutput.setBounds((int)((17.0f/24.0f) * width), (int)((5.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		l_currentCarriage_powerOutput.setBounds((int)((17.0f/24.0f) * width), (int)((7.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
 		l_currentCarriage_passengerLoad = new JLabel("Passenger Load:", JLabel.LEFT);
 		l_currentCarriage_passengerLoad.setVerticalAlignment(JLabel.CENTER);
-		l_currentCarriage_passengerLoad.setBounds((int)((17.0f/24.0f) * width), (int)((5.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		l_currentCarriage_passengerLoad.setBounds((int)((17.0f/24.0f) * width), (int)((7.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
 		l_currentCarriage_seatsAvailable = new JLabel("Seats Available:", JLabel.LEFT);
 		l_currentCarriage_seatsAvailable.setVerticalAlignment(JLabel.CENTER);
-		l_currentCarriage_seatsAvailable.setBounds((int)((17.0f/24.0f) * width), (int)((7.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		l_currentCarriage_seatsAvailable.setBounds((int)((17.0f/24.0f) * width), (int)((9.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
 		l_currentCarriage_goodsType = new JLabel("Goods Type:", JLabel.LEFT);
 		l_currentCarriage_goodsType.setVerticalAlignment(JLabel.CENTER);
-		l_currentCarriage_goodsType.setBounds((int)((17.0f/24.0f) * width), (int)((5.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		l_currentCarriage_goodsType.setBounds((int)((17.0f/24.0f) * width), (int)((7.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
 		
 		l_currentCarriage_input_type = new JLabel("", JLabel.RIGHT);
@@ -180,25 +185,30 @@ public class MainFrame extends JFrame {
 		l_currentCarriage_input_weight.setVerticalAlignment(JLabel.CENTER);
 		l_currentCarriage_input_weight.setBounds((int)((17.0f/24.0f) * width), (int)((3.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
+		l_currentCarriage_input_carriageNumber = new JLabel("", JLabel.RIGHT);
+		l_currentCarriage_input_carriageNumber.setVerticalAlignment(JLabel.CENTER);
+		l_currentCarriage_input_carriageNumber.setBounds((int)((17.0f/24.0f) * width), (int)((5.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		
 		l_currentCarriage_input_powerOutput = new JLabel("", JLabel.RIGHT);
 		l_currentCarriage_input_powerOutput.setVerticalAlignment(JLabel.CENTER);
-		l_currentCarriage_input_powerOutput.setBounds((int)((17.0f/24.0f) * width), (int)((5.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		l_currentCarriage_input_powerOutput.setBounds((int)((17.0f/24.0f) * width), (int)((7.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
 		l_currentCarriage_input_passengerLoad = new JLabel("", JLabel.RIGHT);
 		l_currentCarriage_input_passengerLoad.setVerticalAlignment(JLabel.CENTER);
-		l_currentCarriage_input_passengerLoad.setBounds((int)((17.0f/24.0f) * width), (int)((5.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		l_currentCarriage_input_passengerLoad.setBounds((int)((17.0f/24.0f) * width), (int)((7.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
 		l_currentCarriage_input_seatsAvailable = new JLabel("", JLabel.RIGHT);
 		l_currentCarriage_input_seatsAvailable.setVerticalAlignment(JLabel.CENTER);
-		l_currentCarriage_input_seatsAvailable.setBounds((int)((17.0f/24.0f) * width), (int)((7.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		l_currentCarriage_input_seatsAvailable.setBounds((int)((17.0f/24.0f) * width), (int)((9.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
 		l_currentCarriage_input_goodsType = new JLabel("", JLabel.RIGHT);
 		l_currentCarriage_input_goodsType.setVerticalAlignment(JLabel.CENTER);
-		l_currentCarriage_input_goodsType.setBounds((int)((17.0f/24.0f) * width), (int)((5.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
+		l_currentCarriage_input_goodsType.setBounds((int)((17.0f/24.0f) * width), (int)((7.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
 		
 		l_currentCarriage_type.setVisible(false);
 		l_currentCarriage_weight.setVisible(false);
+		l_currentCarriage_carriageNumber.setVisible(false);
 		l_currentCarriage_powerOutput.setVisible(false);
 		l_currentCarriage_passengerLoad.setVisible(false);
 		l_currentCarriage_seatsAvailable.setVisible(false);
@@ -257,7 +267,7 @@ public class MainFrame extends JFrame {
 		l_train_input_availableSeats.setVerticalAlignment(JLabel.CENTER);
 		l_train_input_availableSeats.setBounds((int)((17.0f/24.0f) * width), (int)((27.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
-		l_train_input_canMove = new JLabel("NO", JLabel.RIGHT);
+		l_train_input_canMove = new JLabel("Yes", JLabel.RIGHT);
 		l_train_input_canMove.setVerticalAlignment(JLabel.CENTER);
 		l_train_input_canMove.setBounds((int)((17.0f/24.0f) * width), (int)((29.0f/48.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
@@ -266,7 +276,7 @@ public class MainFrame extends JFrame {
 		btn_createCarriage_add.setBounds((int)((2.1f/9.0f) * width), (int)((8.0f/9.0f) * height), (int)((1.0f/11.0f) * width), (int)((1.0f/18.0f) * height));
 		btn_createCarriage_add.setEnabled(false);
 		
-		btn_removeCarriage_remove = new JButton("Remove");
+		btn_removeCarriage_remove = new JButton("Remove Last");
 		btn_removeCarriage_remove.setBounds((int)((7.0f/18.0f) * width), (int)((29.0f/36.0f) * height), (int)((2.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		btn_removeCarriage_remove.setEnabled(false);
 		
@@ -281,11 +291,13 @@ public class MainFrame extends JFrame {
 			//Weight
 		tf_createCarriage_weight = new JFormattedTextField();
 		tf_createCarriage_weight.setValue(new Integer(0));
+		tf_createCarriage_weight.setHorizontalAlignment(JTextField.RIGHT);
 		tf_createCarriage_weight.setBounds((int)((1.0f/9.0f) * width), (int)((14.0f/18.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
 			//Power Class/Passenger Seats/Goods Type
 		tf_createCarriage_secondary = new JFormattedTextField();
 		tf_createCarriage_secondary.setValue(new String("0"));
+		tf_createCarriage_secondary.setHorizontalAlignment(JTextField.RIGHT);
 		tf_createCarriage_secondary.setBounds((int)((1.0f/9.0f) * width), (int)((8.0f/9.0f) * height), (int)((1.0f/9.0f) * width), (int)((1.0f/18.0f) * height));
 		
 			//Boarding passengers
@@ -321,6 +333,7 @@ public class MainFrame extends JFrame {
 		
 		add(l_currentCarriage_type);
 		add(l_currentCarriage_weight);
+		add(l_currentCarriage_carriageNumber);
 		add(l_currentCarriage_powerOutput);
 		add(l_currentCarriage_passengerLoad);
 		add(l_currentCarriage_seatsAvailable);
@@ -328,6 +341,7 @@ public class MainFrame extends JFrame {
 		
 		add(l_currentCarriage_input_type);
 		add(l_currentCarriage_input_weight);
+		add(l_currentCarriage_input_carriageNumber);
 		add(l_currentCarriage_input_powerOutput);
 		add(l_currentCarriage_input_passengerLoad);
 		add(l_currentCarriage_input_seatsAvailable);
@@ -414,7 +428,6 @@ public class MainFrame extends JFrame {
 					ChangeListLabels();
 					RemoveButtonState();
 					RefreshTrainInfo();
-					BoardButtonState();
 				}
 			}
 		});
@@ -434,8 +447,13 @@ public class MainFrame extends JFrame {
 					repaint();
 					trainCarriages.removeLast();
 					RemoveButtonState();
-					BoardButtonState();
-					UpdateCurrentCarriageStatistics(null);
+					int carriagesSize = trainCarriages.size();
+					if (carriagesSize <= 0) UpdateCurrentCarriageStatistics(null);
+					else if (currentCarriageIndex >= carriagesSize)
+					{
+						currentCarriageIndex--;
+						UpdateCurrentCarriageStatistics(GetCarriageByIndex(currentCarriageIndex));
+					}
 					
 					RefreshTrainInfo();
 					
@@ -450,7 +468,7 @@ public class MainFrame extends JFrame {
 					else
 					{
 						ChangeList(new String[]{"Locomotive"});
-						l_train_input_canMove.setText("NO");
+						l_train_input_canMove.setText("Yes");
 					}
 					btn_createCarriage_add.setEnabled(AddButtonState());
 				} 
@@ -490,7 +508,7 @@ public class MainFrame extends JFrame {
 				l_train_input_passengers.setText("0");
 				l_train_input_seats.setText("0");
 				l_train_input_availableSeats.setText("0");
-				l_train_input_canMove.setText("NO");
+				l_train_input_canMove.setText("No");
 				
 				//reset carriage info
 				UpdateCurrentCarriageStatistics(null);
@@ -502,7 +520,6 @@ public class MainFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				System.out.println(tf_boardPassengers_passengers.getText());
 				try
 				{
 					Integer remaining = dt_carriages.board(Integer.parseInt((tf_boardPassengers_passengers.getText())));
@@ -522,10 +539,24 @@ public class MainFrame extends JFrame {
 		});
 	}
 	
+	private Integer GetIndexOfCarriage(RollingStock carriage)
+	{
+		Integer i = 0;
+		RollingStock compare = dt_carriages.firstCarriage();
+		while (carriage != compare)
+		{
+			compare = dt_carriages.nextCarriage();
+			if (compare == null) break;
+			i++;
+		}
+		return i;
+	}
+	
 	private void UpdateCurrentCarriageStatistics(RollingStock carriage)
 	{
 		l_currentCarriage_type.setVisible(false);
 		l_currentCarriage_weight.setVisible(false);
+		l_currentCarriage_carriageNumber.setVisible(false);
 		l_currentCarriage_powerOutput.setVisible(false);
 		l_currentCarriage_passengerLoad.setVisible(false);
 		l_currentCarriage_seatsAvailable.setVisible(false);
@@ -533,6 +564,7 @@ public class MainFrame extends JFrame {
 		
 		l_currentCarriage_input_type.setVisible(false);
 		l_currentCarriage_input_weight.setVisible(false);
+		l_currentCarriage_input_carriageNumber.setVisible(false);
 		l_currentCarriage_input_powerOutput.setVisible(false);
 		l_currentCarriage_input_passengerLoad.setVisible(false);
 		l_currentCarriage_input_seatsAvailable.setVisible(false);
@@ -544,14 +576,17 @@ public class MainFrame extends JFrame {
 			
 			l_currentCarriage_type.setVisible(true);
 			l_currentCarriage_weight.setVisible(true);
+			l_currentCarriage_carriageNumber.setVisible(true);
 			l_currentCarriage_powerOutput.setVisible(true);
 			
 			l_currentCarriage_input_type.setVisible(true);
 			l_currentCarriage_input_weight.setVisible(true);
+			l_currentCarriage_input_carriageNumber.setVisible(true);
 			l_currentCarriage_input_powerOutput.setVisible(true);
 			
 			l_currentCarriage_input_type.setText("Locomotive");
 			l_currentCarriage_input_weight.setText(l.getGrossWeight().toString());
+			l_currentCarriage_input_carriageNumber.setText(new Integer(GetIndexOfCarriage(carriage)+1).toString());
 			l_currentCarriage_input_powerOutput.setText(l.power().toString());
 		}
 		else if (carriage instanceof PassengerCar)
@@ -560,16 +595,19 @@ public class MainFrame extends JFrame {
 			
 			l_currentCarriage_type.setVisible(true);
 			l_currentCarriage_weight.setVisible(true);
+			l_currentCarriage_carriageNumber.setVisible(true);
 			l_currentCarriage_passengerLoad.setVisible(true);
 			l_currentCarriage_seatsAvailable.setVisible(true);
 			
 			l_currentCarriage_input_type.setVisible(true);
 			l_currentCarriage_input_weight.setVisible(true);
+			l_currentCarriage_input_carriageNumber.setVisible(true);
 			l_currentCarriage_input_passengerLoad.setVisible(true);
 			l_currentCarriage_input_seatsAvailable.setVisible(true);
 			
 			l_currentCarriage_input_type.setText("Passenger Car");
 			l_currentCarriage_input_weight.setText(p.getGrossWeight().toString());
+			l_currentCarriage_input_carriageNumber.setText(new Integer(GetIndexOfCarriage(carriage)+1).toString());
 			l_currentCarriage_input_passengerLoad.setText(p.numberOnBoard().toString());
 			l_currentCarriage_input_seatsAvailable.setText(new Integer(p.numberOfSeats() - p.numberOnBoard()).toString());
 		}
@@ -579,14 +617,17 @@ public class MainFrame extends JFrame {
 			
 			l_currentCarriage_type.setVisible(true);
 			l_currentCarriage_weight.setVisible(true);
+			l_currentCarriage_carriageNumber.setVisible(true);
 			l_currentCarriage_goodsType.setVisible(true);
 			
 			l_currentCarriage_input_type.setVisible(true);
 			l_currentCarriage_input_weight.setVisible(true);
+			l_currentCarriage_input_carriageNumber.setVisible(true);
 			l_currentCarriage_input_goodsType.setVisible(true);
 			
 			l_currentCarriage_input_type.setText("Freight Car");
 			l_currentCarriage_input_weight.setText(f.getGrossWeight().toString());
+			l_currentCarriage_input_carriageNumber.setText(new Integer(GetIndexOfCarriage(carriage)+1).toString());
 			l_currentCarriage_input_goodsType.setText(f.goodsType());
 		}
 	}
@@ -610,7 +651,9 @@ public class MainFrame extends JFrame {
 		trainLabel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				UpdateCurrentCarriageStatistics(GetCarriageByIndex(trainCarriages.indexOf(e.getSource())));
+				int index = trainCarriages.indexOf(e.getSource());
+				UpdateCurrentCarriageStatistics(GetCarriageByIndex(index));
+				currentCarriageIndex = index;
 			}
 		});
 		trainLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -634,6 +677,7 @@ public class MainFrame extends JFrame {
 				ChangeList(new String[]{"Passenger Car", "Freight Car"});
 				trainLabel.setText("Locomotive");
 				trainLabel.setBackground(new Color(255,255,0));
+				UpdateCurrentCarriageStatistics(dt_carriages.firstCarriage());
 				
 			} catch (NumberFormatException | TrainException e1) {
 //				e1.printStackTrace();
@@ -748,11 +792,6 @@ public class MainFrame extends JFrame {
 		return false;
 	}
 	
-	private void BoardButtonState()
-	{
-		//btn_boardPassengers_board.setEnabled(GetLastCar().equals("Passenger Car"));
-	}
-	
 	private void RefreshTrainInfo()
 	{
 		RollingStock car = dt_carriages.firstCarriage();
@@ -766,7 +805,6 @@ public class MainFrame extends JFrame {
 		}
 		seats = dt_carriages.numberOfSeats();
 		seatsTaken = dt_carriages.numberOnBoard();
-		System.out.println("seats: " + seats + ", seats taken: " + seatsTaken);
 		l_train_input_power.setText(powerLeft.toString());
 		while (car != null)
 		{
@@ -785,7 +823,7 @@ public class MainFrame extends JFrame {
 		l_train_input_seats.setText(seats.toString());
 		Integer seatsLeft = seats - seatsTaken;
 		l_train_input_availableSeats.setText(seatsLeft.toString());
-		l_train_input_canMove.setText(powerLeft < 0? "NO" : "Yes");
+		l_train_input_canMove.setText(powerLeft < 0? "No" : "Yes");
 	}
 	
 	private void ChangeList(String[] list)
