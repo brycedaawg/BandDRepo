@@ -70,6 +70,12 @@ public class MainFrame extends JFrame {
 	private int carriageCount = 0;
 	private int currentCarriageIndex = 0;
 	
+	/**
+	 * The main frame that provides the window layout and event listeners for each interactive element
+	 * @param title the name to set the window to
+	 * @param width the pixel width to set the window to
+	 * @param height the pixel height to set the window to
+	 */
 	public MainFrame(String title, int width, int height)
 	{
 		super(title);
@@ -213,7 +219,6 @@ public class MainFrame extends JFrame {
 		l_currentCarriage_passengerLoad.setVisible(false);
 		l_currentCarriage_seatsAvailable.setVisible(false);
 		l_currentCarriage_goodsType.setVisible(false);
-		
 		
 		JLabel l_train_weight = new JLabel("Weight:", JLabel.LEFT);
 		l_train_weight.setVerticalAlignment(JLabel.CENTER);
@@ -424,7 +429,7 @@ public class MainFrame extends JFrame {
 				//make sure an option is selected
 				if(lst_createCarriage_rollingStocks.getSelectedIndex() >= 0)
 				{
-					AddCarriage(lst_createCarriage_rollingStocks.getSelectedValue().toString());
+					AddCarriage();
 					ChangeListLabels();
 					RemoveButtonState();
 					RefreshTrainInfo();
@@ -439,7 +444,7 @@ public class MainFrame extends JFrame {
 			{
 				try
 				{
-					dt_carriages.RemoveCarriage();
+					dt_carriages.removeCarriage();
 					carriageCount--;
 					trainPanel.remove(trainCarriages.get(trainCarriages.size()-1));
 					trainPanel.setPreferredSize(new Dimension(carriageCount * 210 + 10, trainPanel.getPreferredSize().height));
@@ -460,7 +465,6 @@ public class MainFrame extends JFrame {
 					if(dt_carriages.firstCarriage() == null)
 					{
 						ChangeList(new String[]{"Locomotive"});
-						l_train_input_canMove.setText("Yes");
 					}
 					else if (GetLastCar().equals("Passenger Car") || GetLastCar().equals("Locomotive"))
 					{
@@ -541,6 +545,11 @@ public class MainFrame extends JFrame {
 		});
 	}
 	
+	/**
+	 * Returns the index of the carriage object in the departing train
+	 * @param carriage the object
+	 * @return Integer the index of the object within the departing train
+	 */
 	private Integer GetIndexOfCarriage(RollingStock carriage)
 	{
 		Integer i = 0;
@@ -554,6 +563,10 @@ public class MainFrame extends JFrame {
 		return i;
 	}
 	
+	/**
+	 * Helper method to update the stats of the carriage for the Current Carriage window
+	 * @param carriage the object to set the window's stats to
+	 */
 	private void UpdateCurrentCarriageStatistics(RollingStock carriage)
 	{
 		l_currentCarriage_type.setVisible(false);
@@ -634,6 +647,11 @@ public class MainFrame extends JFrame {
 		}
 	}
 	
+	/**
+	 * Returns the carriage object in the departing train
+	 * @param Integer the index to find the carriage
+	 * @return RollingStock the carriage object from the departing train
+	 */
 	private RollingStock GetCarriageByIndex(Integer i)
 	{
 		RollingStock c = dt_carriages.firstCarriage();
@@ -645,6 +663,10 @@ public class MainFrame extends JFrame {
 		return c;
 	}
 	
+	/**
+	 * Helper method to set up a JButton for each carriage in the train display
+	 * @return JButton the initialised button reference
+	 */
 	private JButton CreateTrainLabel()
 	{
 		//Create a new train label to add to the GUI
@@ -667,9 +689,12 @@ public class MainFrame extends JFrame {
 		return trainLabel;
 	}
 	
-	private void AddCarriage(String selected)
+	/**
+	 * Helper method to add a carriage to the departing train using the input from the Add Carriage window
+	 */
+	private void AddCarriage()
 	{
-		switch(selected)
+		switch(lst_createCarriage_rollingStocks.getSelectedValue())
 		{
 		case "Locomotive":
 			try 
@@ -726,6 +751,10 @@ public class MainFrame extends JFrame {
 		}
 	}
 	
+	/**
+	 * Helper method to get the type of the last carriage in the departing train
+	 * @return String type of carriage
+	 */
 	private String GetLastCar()
 	{
 		RollingStock car = dt_carriages.firstCarriage();
@@ -746,11 +775,17 @@ public class MainFrame extends JFrame {
 		return carType;
 	}
 	
+	/**
+	 * Updates the enabled state of the Carriage Remove button 
+	 */
 	private void RemoveButtonState()
 	{
 		btn_removeCarriage_remove.setEnabled(carriageCount > 0 ? true : false);
 	}
 	
+	/**
+	 * Updates the enabled state of the Carriage Add button
+	 */
 	private Boolean AddButtonState()
 	{
 		try
@@ -762,7 +797,7 @@ public class MainFrame extends JFrame {
 			else if(Integer.parseInt(tf_createCarriage_weight.getText().toString()) >= 0)
 			{
 				String str;
-				switch(lst_createCarriage_rollingStocks.getSelectedValue().toString())
+				switch(lst_createCarriage_rollingStocks.getSelectedValue())
 				{
 				case "Locomotive":
 					str = tf_createCarriage_secondary.getText().toUpperCase();
@@ -799,7 +834,10 @@ public class MainFrame extends JFrame {
 		catch (NumberFormatException e) { }
 		return false;
 	}
-	
+
+	/**
+	 * Updates the stats in the Train information window
+	 */
 	private void RefreshTrainInfo()
 	{
 		RollingStock car = dt_carriages.firstCarriage();
@@ -831,9 +869,13 @@ public class MainFrame extends JFrame {
 		l_train_input_seats.setText(seats.toString());
 		Integer seatsLeft = seats - seatsTaken;
 		l_train_input_availableSeats.setText(seatsLeft.toString());
-		l_train_input_canMove.setText(powerLeft < 0? "No" : "Yes");
+		l_train_input_canMove.setText(dt_carriages.trainCanMove() ? "Yes" : "No");
 	}
 	
+	/**
+	 * Adjusts the carriage selection list to the values in the parameter and then redraws the window
+	 * @param list a string array of the carriage types for the selection list
+	 */
 	private void ChangeList(String[] list)
 	{
 		DefaultListModel<String> newModel = new DefaultListModel<String>();
@@ -848,6 +890,9 @@ public class MainFrame extends JFrame {
 		repaint();
 	}
 	
+	/**
+	 * Adjusts the label for the second text field so that the user knows what they should be inputting
+	 */
 	private void ChangeListLabels()
 	{
 		btn_createCarriage_add.setEnabled(AddButtonState());

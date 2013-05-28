@@ -181,7 +181,7 @@ public class TrainTests {
 	@Test
 	public void testRemoveCarriage() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
-		train.RemoveCarriage();
+		train.removeCarriage();
 		assertEquals(train.firstCarriage(), null);
 	}
 	
@@ -191,8 +191,8 @@ public class TrainTests {
 	@Test(expected = TrainException.class)
 	public void testRemoveCarriage_noneToRemove() throws TrainException {
 		train.addCarriage(new Locomotive(1500, "4D"));
-		train.RemoveCarriage();
-		train.RemoveCarriage();
+		train.removeCarriage();
+		train.removeCarriage();
 	}
 	
 	/**
@@ -203,7 +203,7 @@ public class TrainTests {
 		train.addCarriage(new Locomotive(1500, "4D"));
 		train.addCarriage(new PassengerCar(1000, 30));
 		train.board(2);
-		train.RemoveCarriage();
+		train.removeCarriage();
 	}
 	
 	/**
@@ -227,7 +227,7 @@ public class TrainTests {
 		train.addCarriage(new Locomotive(120, "4D"));
 		train.addCarriage(new PassengerCar(50, 30));
 		train.addCarriage(new FreightCar(80, "G"));
-		assertTrue(train.canMove());
+		assertTrue(train.trainCanMove());
 	}
 	
 	/**
@@ -239,7 +239,7 @@ public class TrainTests {
 		train.addCarriage(new PassengerCar(1000, 30));
 		train.addCarriage(new PassengerCar(2000, 30));
 		train.addCarriage(new FreightCar(1000, "G"));
-		assertFalse(train.canMove());
+		assertFalse(train.trainCanMove());
 	}
 	
 	/**
@@ -247,6 +247,6 @@ public class TrainTests {
 	 */
 	@Test
 	public void testTrainCanMove_noCarriages() throws TrainException {
-		assertEquals(train.canMove(), true);
+		assertEquals(train.trainCanMove(), true);
 	}
 }
